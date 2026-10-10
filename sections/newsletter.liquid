@@ -1,0 +1,32 @@
+{%- comment -%} Newsletter {%- endcomment -%}
+<section class="news sec">
+  <div class="wrap reveal">
+    <h2 class="display">{{ section.settings.title }}</h2>
+    {%- if section.settings.text != blank -%}<p>{{ section.settings.text }}</p>{%- endif -%}
+    {%- form 'customer' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      {%- if form.posted_successfully? -%}
+        <p style="color:#fff">{{ section.settings.success | default: '¡Listo! Ya estás dentro.' }}</p>
+      {%- else -%}
+        <div class="news-form">
+          <input type="email" name="contact[email]" placeholder="{{ section.settings.placeholder }}" aria-label="Email" required>
+          <button type="submit">{{ section.settings.btn_label }}</button>
+        </div>
+      {%- endif -%}
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "Entra al cardumen" },
+    { "type": "textarea", "id": "text", "label": "Texto", "default": "Lanzamientos, restocks y precios de distribuidor antes que nadie." },
+    { "type": "text", "id": "placeholder", "label": "Placeholder", "default": "tu@correo.com" },
+    { "type": "text", "id": "btn_label", "label": "Botón", "default": "Unirme" },
+    { "type": "text", "id": "success", "label": "Mensaje de éxito", "default": "¡Listo! Ya estás dentro." }
+  ],
+  "presets": [ { "name": "Newsletter" } ]
+}
+{% endschema %}

@@ -1,0 +1,172 @@
+{%- comment -%} Libro de Reclamaciones virtual (Perú) — DS 011-2011-PCM y modificatorias {%- endcomment -%}
+<section class="sec lr">
+  <div class="wrap lr-wrap">
+    <div class="lr-head reveal">
+      <span class="lr-eyebrow">INDECOPI · Ley N° 29571</span>
+      <h1 class="display">Libro de Reclamaciones</h1>
+      <span class="lr-accent"></span>
+      <p class="lr-intro">Conforme al Código de Protección y Defensa del Consumidor, ponemos a tu disposición nuestro Libro de Reclamaciones virtual. Registra aquí tu <strong>reclamo</strong> (disconformidad con el producto o servicio) o tu <strong>queja</strong> (malestar respecto a la atención). Atenderemos tu solicitud en un plazo máximo de <strong>15 días hábiles</strong>.</p>
+    </div>
+
+    <div class="lr-prov">
+      <div><span>Razón social</span><b>TPGROUP S.A.C.</b></div>
+      <div><span>RUC</span><b>20615215971</b></div>
+      <div><span>Nombre comercial</span><b>TodoPesca</b></div>
+      <div><span>Plataforma web</span><b>{{ shop.domain }}</b></div>
+      <div class="lr-col2"><span>Domicilio fiscal</span><b>Mateo Pumacahua Mza. D Lote 9, Urb. Santa Patricia, La Molina, Lima – Perú</b></div>
+    </div>
+
+    {%- form 'contact', id: 'lrForm' -%}
+      {%- if form.posted_successfully? -%}
+        <div class="lr-ok" id="lrOk">
+          <h2>Hoja de reclamación registrada</h2>
+          <p>Hemos recibido tu hoja de reclamación. Recibirás una copia en el correo que indicaste y nuestra respuesta dentro de los <strong>15 días hábiles</strong> que establece la ley. Guarda esta constancia.</p>
+          <div class="lr-const" id="lrConst"></div>
+          <button type="button" class="btn" onclick="window.print()">Imprimir / guardar PDF</button>
+        </div>
+      {%- else -%}
+        {%- if form.errors -%}<div class="lr-err">Revisa los campos obligatorios e inténtalo nuevamente.</div>{%- endif -%}
+        <input type="hidden" name="contact[__tipo_registro]" value="Libro de Reclamaciones">
+        <input type="hidden" id="lrCodigo" name="contact[Codigo de hoja]" value="">
+        <input type="hidden" id="lrFechaIn" name="contact[Fecha]" value="">
+        <input type="hidden" name="contact[Proveedor]" value="TPGROUP S.A.C. · RUC 20615215971 · TodoPesca">
+
+        <div class="lr-meta"><span>Hoja N° <b id="lrCodigoTxt">—</b></span><span>Fecha <b id="lrFechaTxt">—</b></span></div>
+
+        <div class="lr-block">
+          <h3>1. Tipo de solicitud</h3>
+          <div class="lr-radios">
+            <label><input type="radio" name="contact[Tipo]" value="Reclamo" required> Reclamo</label>
+            <label><input type="radio" name="contact[Tipo]" value="Queja"> Queja</label>
+          </div>
+        </div>
+
+        <div class="lr-block">
+          <h3>2. Identificación del consumidor</h3>
+          <div class="lr-grid">
+            <label class="lr-field"><span>Nombre completo *</span><input type="text" name="contact[Nombre completo]" required></label>
+            <label class="lr-field"><span>Tipo de documento *</span>
+              <select name="contact[Tipo de documento]" required><option value="DNI">DNI</option><option value="Carnet de extranjeria">Carné de extranjería</option><option value="Pasaporte">Pasaporte</option><option value="RUC">RUC</option></select>
+            </label>
+            <label class="lr-field"><span>N° de documento *</span><input type="text" name="contact[Numero de documento]" required></label>
+            <label class="lr-field"><span>Correo electrónico *</span><input type="email" name="contact[email]" required></label>
+            <label class="lr-field"><span>Teléfono / celular *</span><input type="tel" name="contact[Telefono]" required></label>
+            <label class="lr-field"><span>Domicilio *</span><input type="text" name="contact[Domicilio]" required></label>
+            <label class="lr-field"><span>Departamento / ciudad</span><input type="text" name="contact[Ciudad]"></label>
+            <label class="lr-field"><span>¿Eres menor de edad?</span>
+              <select name="contact[Menor de edad]"><option value="No">No</option><option value="Si - registra un apoderado">Sí</option></select>
+            </label>
+            <label class="lr-field lr-col2"><span>Nombre del padre/madre o apoderado (si eres menor de edad)</span><input type="text" name="contact[Apoderado]"></label>
+          </div>
+        </div>
+
+        <div class="lr-block">
+          <h3>3. Identificación del bien contratado</h3>
+          <div class="lr-radios">
+            <label><input type="radio" name="contact[Bien]" value="Producto" checked> Producto</label>
+            <label><input type="radio" name="contact[Bien]" value="Servicio"> Servicio</label>
+          </div>
+          <div class="lr-grid">
+            <label class="lr-field"><span>N° de pedido o comprobante (si aplica)</span><input type="text" name="contact[Numero de pedido]"></label>
+            <label class="lr-field"><span>Monto reclamado (S/)</span><input type="text" name="contact[Monto reclamado]" inputmode="decimal"></label>
+            <label class="lr-field lr-col2"><span>Descripción del producto o servicio *</span><input type="text" name="contact[Descripcion del bien]" required></label>
+          </div>
+        </div>
+
+        <div class="lr-block">
+          <h3>4. Detalle</h3>
+          <label class="lr-field lr-full"><span>Detalle del reclamo o queja *</span><textarea name="contact[Detalle del reclamo]" rows="4" required></textarea></label>
+          <label class="lr-field lr-full"><span>Pedido del consumidor (qué solicitas) *</span><textarea name="contact[Pedido del consumidor]" rows="3" required></textarea></label>
+        </div>
+
+        <label class="lr-check"><input type="checkbox" required> He leído y acepto la <a href="/policies/privacy-policy" target="_blank">política de privacidad</a> y autorizo el tratamiento de mis datos para atender este registro.</label>
+
+        <button type="submit" class="btn">Enviar hoja de reclamación</button>
+        <p class="lr-legal">La formulación del reclamo no impide acudir a otras vías de solución de controversias ni es requisito previo para interponer una denuncia ante el INDECOPI. El proveedor debe dar respuesta en un plazo no mayor a 15 días hábiles improrrogables.</p>
+      {%- endif -%}
+    {%- endform -%}
+  </div>
+</section>
+
+<style>
+.lr-wrap{max-width:880px}
+.lr-head{margin-bottom:28px}
+.lr-eyebrow{font-family:'Oswald';text-transform:uppercase;letter-spacing:.18em;font-size:.72rem;color:#cf2e2e;display:block;margin-bottom:10px}
+.lr .display{font-size:clamp(2rem,6vw,3.4rem);line-height:1}
+.lr-accent{display:block;width:56px;height:4px;background:#cf2e2e;margin:18px 0 18px}
+.lr-intro{color:var(--grey);line-height:1.6;max-width:70ch}
+.lr-prov{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 18px;background:#fafafa;border:1px solid var(--line);padding:18px 20px;margin-bottom:26px}
+.lr-prov > div{display:flex;flex-direction:column;gap:4px}
+.lr-prov span{font-family:'Oswald';text-transform:uppercase;font-size:.66rem;letter-spacing:.06em;color:var(--grey)}
+.lr-prov b{font-size:.9rem;font-weight:600}
+.lr-prov .lr-col2{grid-column:1 / -1}
+.lr-meta{display:flex;gap:28px;flex-wrap:wrap;font-family:'Oswald';text-transform:uppercase;font-size:.78rem;letter-spacing:.05em;color:var(--grey);margin-bottom:6px}
+.lr-meta b{color:var(--black);margin-left:6px}
+.lr-block{border-top:1px solid var(--line);padding:24px 0}
+.lr-block h3{font-family:'Oswald';text-transform:uppercase;letter-spacing:.05em;font-size:.95rem;margin:0 0 16px}
+.lr-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.lr-col2{grid-column:1 / -1}
+.lr-field{display:flex;flex-direction:column;gap:6px}
+.lr-field span{font-family:'Oswald';text-transform:uppercase;font-size:.7rem;letter-spacing:.05em;color:var(--grey)}
+.lr-field input,.lr-field select,.lr-field textarea{border:1.5px solid var(--line);background:#fff;padding:11px 13px;font-size:.95rem;font-family:inherit;width:100%}
+.lr-field input:focus,.lr-field select:focus,.lr-field textarea:focus{outline:none;border-color:#0a0a0a}
+.lr-full{margin-bottom:16px}
+.lr-radios{display:flex;gap:24px;font-family:'Oswald';text-transform:uppercase;font-size:.85rem;margin-bottom:16px}
+.lr-radios label{display:flex;align-items:center;gap:8px;cursor:pointer}
+.lr-check{display:flex;gap:10px;align-items:flex-start;font-size:.85rem;color:var(--grey);margin:8px 0 22px;line-height:1.5}
+.lr-check a{color:#cf2e2e;text-decoration:underline}
+.lr .btn{min-width:260px;justify-content:center}
+.lr-legal{font-size:.78rem;color:var(--g3);margin-top:18px;line-height:1.5;max-width:70ch}
+.lr-ok{border:1.5px solid #1a7f37;background:#f0faf2;padding:28px}
+.lr-ok h2{font-family:'Oswald';text-transform:uppercase;font-size:1.2rem;margin:0 0 10px;color:#1a7f37}
+.lr-ok p{margin-bottom:18px;line-height:1.55}
+.lr-const{background:#fff;border:1px solid var(--line);margin-bottom:20px}
+.lr-const:empty{display:none}
+.lr-const div{display:grid;grid-template-columns:200px 1fr;gap:12px;padding:9px 14px;border-bottom:1px solid var(--line);font-size:.88rem}
+.lr-const div:last-child{border-bottom:0}
+.lr-const span{font-family:'Oswald';text-transform:uppercase;font-size:.68rem;letter-spacing:.05em;color:var(--grey)}
+.lr-err{border:1.5px solid #cf2e2e;background:#fdeded;color:#a31515;padding:14px 16px;margin-bottom:20px;font-size:.9rem}
+@media(max-width:640px){.lr-grid{grid-template-columns:1fr}.lr .btn{width:100%}.lr-prov{grid-template-columns:1fr 1fr}.lr-const div{grid-template-columns:1fr;gap:2px}}
+@media print{.hdr,.topbar,footer,.footer-tp,.lr .btn,.mobile-menu{display:none!important}.lr-ok{border:0;background:#fff;padding:0}}
+</style>
+
+<script>
+(function(){
+  var KEY='tp_lr_ultima';
+  var ok=document.getElementById('lrOk');
+  if(ok){
+    var box=document.getElementById('lrConst'), data=null;
+    try{ data=JSON.parse(sessionStorage.getItem(KEY)||'null'); }catch(e){}
+    if(box&&data){
+      data.forEach(function(r){
+        var d=document.createElement('div'), s=document.createElement('span'), v=document.createElement('b');
+        s.textContent=r[0]; v.textContent=r[1]; d.appendChild(s); d.appendChild(v); box.appendChild(d);
+      });
+    }
+    ok.scrollIntoView({block:'start'});
+    return;
+  }
+  var f=document.getElementById('lrForm');
+  if(!f)return;
+  var d=new Date(); function p(n){return(n<10?'0':'')+n;}
+  var code='HR-'+d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+'-'+p(d.getHours())+p(d.getMinutes())+p(d.getSeconds());
+  var fecha=p(d.getDate())+'/'+p(d.getMonth()+1)+'/'+d.getFullYear()+' '+p(d.getHours())+':'+p(d.getMinutes());
+  var c=document.getElementById('lrCodigo'); if(c)c.value=code;
+  var fi=document.getElementById('lrFechaIn'); if(fi)fi.value=fecha;
+  var ct=document.getElementById('lrCodigoTxt'); if(ct)ct.textContent=code;
+  var ft=document.getElementById('lrFechaTxt'); if(ft)ft.textContent=fecha;
+  f.addEventListener('submit',function(){
+    var rows=[];
+    new FormData(f).forEach(function(v,k){
+      var m=/^contact\[(.+)\]$/.exec(k); if(!m||!v||m[1].indexOf('__')===0)return;
+      var label=m[1]==='email'?'Correo electrónico':m[1];
+      rows.push([label,String(v)]);
+    });
+    try{ sessionStorage.setItem(KEY,JSON.stringify(rows)); }catch(e){}
+  });
+})();
+</script>
+
+{% schema %}
+{ "name": "Libro de Reclamaciones", "settings": [], "presets": [ { "name": "Libro de Reclamaciones" } ] }
+{% endschema %}

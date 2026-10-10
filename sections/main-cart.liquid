@@ -1,0 +1,136 @@
+{%- comment -%} Carrito TodoPesca (B/N, AJAX qty + remove) {%- endcomment -%}
+<section class="sec" style="padding-top:clamp(40px,6vw,80px)">
+  <div class="wrap">
+    <div class="cart-head">
+      <h1 class="display">Carrito</h1>
+      <a class="cart-cont cond" href="/collections/all">Seguir comprando</a>
+    </div>
+
+    {%- if cart.item_count == 0 -%}
+      <div class="cart-empty">
+        <p>Tu carrito está vacío.</p>
+        <a class="btn" href="/collections/all">Ver catálogo</a>
+      </div>
+    {%- else -%}
+      <form action="{{ routes.cart_url }}" method="post" novalidate class="cart-grid" id="cartForm">
+        <div class="cart-items">
+          <div class="cart-row cart-row--head cond">
+            <span>Producto</span><span>Precio</span><span>Cantidad</span><span>Total</span>
+          </div>
+          {%- for item in cart.items -%}
+            <div class="cart-row" data-key="{{ item.key }}">
+              <div class="cart-prod">
+                <a href="{{ item.url }}" class="cart-thumb">
+                  {%- if item.image -%}<img src="{{ item.image | image_url: width: 200 }}" alt="{{ item.product.title | escape }}" loading="lazy">{%- endif -%}
+                </a>
+                <div class="cart-meta">
+                  {%- if item.product.vendor != blank -%}<div class="cart-vendor cond">{{ item.product.vendor }}</div>{%- endif -%}
+                  <a href="{{ item.url }}" class="cart-title">{{ item.product.title }}</a>
+                  {%- unless item.variant.title contains 'Default' -%}<div class="cart-variant">{{ item.variant.title }}</div>{%- endunless -%}
+                  {%- if item.sku != blank -%}<div class="cart-sku cond">SKU {{ item.sku }}</div>{%- endif -%}
+                  <button type="button" class="cart-remove cond" data-remove>Eliminar</button>
+                </div>
+              </div>
+              <div class="cart-price cond" data-label="Precio">{{ item.final_price | money }}</div>
+              <div class="cart-qty">
+                <button type="button" data-q="-" aria-label="Menos">-</button>
+                <input type="text" value="{{ item.quantity }}" inputmode="numeric" readonly data-qty>
+                <button type="button" data-q="+" aria-label="Más">+</button>
+              </div>
+              <div class="cart-line cond" data-label="Total">{{ item.final_line_price | money }}</div>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        <aside class="cart-summary">
+          <h2 class="cond cart-sum-h">Resumen</h2>
+          <div class="cart-sub cond"><span>Subtotal</span><b>{{ cart.total_price | money }}</b></div>
+          <p class="cart-note">Envío e impuestos calculados al finalizar la compra.</p>
+          <button type="submit" name="checkout" class="btn cart-checkout">Finalizar compra</button>
+          <a class="cart-cont2 cond" href="/collections/all">Seguir comprando</a>
+          <div class="cart-trust">
+            <span>Pago seguro</span><span class="sep">/</span><span>Envío Shalom</span><span class="sep">/</span><span>Producto original</span>
+          </div>
+        </aside>
+      </form>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+.cart-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:34px;flex-wrap:wrap}
+.cart-head h1{font-size:clamp(2.2rem,7vw,4rem)}
+.cart-cont{font-size:.8rem;letter-spacing:.08em;color:var(--grey);border-bottom:1px solid transparent;transition:color .15s,border-color .15s}
+.cart-cont:hover{color:var(--black);border-color:var(--black)}
+.cart-empty{border:1px solid var(--line);padding:clamp(40px,8vw,90px);text-align:center}
+.cart-empty p{font-family:'Oswald';text-transform:uppercase;letter-spacing:.06em;color:var(--grey);margin-bottom:22px;font-size:1rem}
+.cart-grid{display:grid;grid-template-columns:1fr 340px;gap:clamp(24px,4vw,56px);align-items:start}
+.cart-row{display:grid;grid-template-columns:1fr 110px 130px 110px;gap:16px;align-items:center;padding:22px 0;border-top:1px solid var(--line)}
+.cart-row--head{padding:0 0 12px;border-top:0;font-size:.72rem;letter-spacing:.08em;color:var(--grey)}
+.cart-row--head span:first-child{text-align:left}
+.cart-row--head span:not(:first-child),.cart-price,.cart-line{text-align:right}
+.cart-prod{display:flex;gap:16px;align-items:flex-start}
+.cart-thumb{width:84px;height:84px;flex:none;border:1px solid var(--line);background:#fff;overflow:hidden}
+.cart-thumb img{width:100%;height:100%;object-fit:contain;padding:6px}
+.cart-vendor{font-size:.66rem;letter-spacing:.14em;color:var(--grey);margin-bottom:4px}
+.cart-title{font-family:'Oswald';font-weight:600;text-transform:uppercase;font-size:.98rem;line-height:1.15;display:block}
+.cart-variant{font-size:.82rem;color:var(--grey);margin-top:3px}
+.cart-sku{font-size:.64rem;letter-spacing:.06em;color:var(--g3);margin-top:5px}
+.cart-remove{background:none;border:0;padding:0;margin-top:10px;font-size:.68rem;letter-spacing:.08em;color:var(--grey);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.cart-remove:hover{color:var(--black)}
+.cart-price,.cart-line{font-size:.95rem}
+.cart-qty{display:inline-flex;align-items:center;border:1.5px solid var(--black);justify-self:center}
+.cart-qty button{width:38px;height:42px;background:#fff;border:0;font-size:1.1rem;cursor:pointer;font-family:'Oswald';line-height:1}
+.cart-qty button:hover{background:var(--g1)}
+.cart-qty input{width:40px;height:42px;text-align:center;border:0;background:#fff;font-family:'Oswald';font-size:.95rem;outline:none}
+.cart-summary{border:1px solid var(--line);padding:26px;position:sticky;top:110px}
+.cart-sum-h{font-size:.85rem;letter-spacing:.1em;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.cart-sub{display:flex;justify-content:space-between;align-items:baseline;font-size:.95rem;letter-spacing:.04em;margin-bottom:8px}
+.cart-sub b{font-size:1.4rem}
+.cart-note{font-size:.78rem;color:var(--grey);line-height:1.5;margin-bottom:20px}
+.cart-checkout{width:100%;justify-content:center;height:54px}
+.cart-cont2{display:block;text-align:center;margin-top:14px;font-size:.74rem;letter-spacing:.08em;color:var(--grey)}
+.cart-cont2:hover{color:var(--black)}
+.cart-trust{display:flex;justify-content:center;flex-wrap:wrap;gap:7px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line);font-family:'Oswald';text-transform:uppercase;font-size:.62rem;letter-spacing:.05em;color:var(--grey)}
+.cart-trust .sep{opacity:.4}
+@media(max-width:820px){
+  .cart-grid{grid-template-columns:1fr}
+  .cart-summary{position:static}
+  .cart-row--head{display:none}
+  .cart-row{grid-template-columns:1fr auto;gap:10px 16px}
+  .cart-prod{grid-column:1 / -1}
+  .cart-price{grid-column:1;text-align:left;order:3}
+  .cart-price::before{content:attr(data-label) " ";color:var(--grey);font-size:.7rem}
+  .cart-qty{grid-column:2;grid-row:2 / 4;justify-self:end}
+  .cart-line{grid-column:1;text-align:left;order:4}
+  .cart-line::before{content:attr(data-label) " ";color:var(--grey);font-size:.7rem}
+}
+</style>
+
+<script>
+(function(){
+  var form=document.getElementById('cartForm');
+  if(!form)return;
+  function change(key,qty){
+    fetch('{{ routes.cart_change_url }}',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({id:key,quantity:qty})})
+      .then(function(r){return r.json();}).then(function(){window.location.reload();})
+      .catch(function(){window.location.reload();});
+  }
+  form.querySelectorAll('.cart-row[data-key]').forEach(function(row){
+    var key=row.getAttribute('data-key');
+    var input=row.querySelector('[data-qty]');
+    row.querySelectorAll('.cart-qty button').forEach(function(b){
+      b.addEventListener('click',function(){
+        var n=parseInt(input.value,10)||1; n+=b.getAttribute('data-q')==='+'?1:-1; if(n<1)n=1;
+        input.value=n; change(key,n);
+      });
+    });
+    var rm=row.querySelector('[data-remove]');
+    if(rm)rm.addEventListener('click',function(){ change(key,0); });
+  });
+})();
+</script>
+
+{% schema %}
+{ "name": "Carrito", "settings": [] }
+{% endschema %}

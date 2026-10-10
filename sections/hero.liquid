@@ -1,0 +1,123 @@
+{%- comment -%} Hero carrusel cinematografico — desktop horizontal / movil vertical {%- endcomment -%}
+<section class="hero" id="heroSec">
+  <div class="hero-slides" id="heroSlides">
+    {%- if section.settings.video_mp4 != blank -%}<div class="hero-slide hero-video is-active"><video class="bgvid" src="{{ section.settings.video_mp4 }}" autoplay muted loop playsinline preload="auto"></video></div>{%- endif -%}
+    {%- if section.settings.img_url != blank -%}<div class="hero-slide d-only{% if section.settings.video_mp4 == blank %} is-active{% endif %}"><img class="bgimg" src="{% render 'cdn-w', u: section.settings.img_url, w: 2000 %}" alt="" loading="eager" fetchpriority="high" decoding="async"></div>{%- endif -%}
+    {%- if section.settings.img_url_2 != blank -%}<div class="hero-slide d-only"><img class="bgimg" src="{% render 'cdn-w', u: section.settings.img_url_2, w: 2000 %}" alt="" loading="lazy" decoding="async"></div>{%- endif -%}
+    {%- if section.settings.img_url_3 != blank -%}<div class="hero-slide d-only"><img class="bgimg" src="{% render 'cdn-w', u: section.settings.img_url_3, w: 2000 %}" alt="" loading="lazy" decoding="async"></div>{%- endif -%}
+    {%- if section.settings.img_url_m != blank -%}<div class="hero-slide m-only{% if section.settings.video_mp4 == blank %} is-active{% endif %}"><img class="bgimg" src="{% render 'cdn-w', u: section.settings.img_url_m, w: 900, f: 'pjpg' %}" alt="" loading="eager" decoding="async"></div>{%- endif -%}
+    {%- if section.settings.img_url_m2 != blank -%}<div class="hero-slide m-only"><img class="bgimg" src="{% render 'cdn-w', u: section.settings.img_url_m2, w: 900, f: 'pjpg' %}" alt="" loading="lazy" decoding="async"></div>{%- endif -%}
+    {%- if section.settings.img_url_m3 != blank -%}<div class="hero-slide m-only"><img class="bgimg" src="{% render 'cdn-w', u: section.settings.img_url_m3, w: 900, f: 'pjpg' %}" alt="" loading="lazy" decoding="async"></div>{%- endif -%}
+  </div>
+
+  <div class="hero-inner hero-fade">
+    {%- if section.settings.eyebrow != blank -%}<div class="eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
+    {%- if section.settings.title != blank -%}<h1 class="display">{{ section.settings.title }}</h1>{%- endif -%}
+    {%- if section.settings.text != blank -%}<p>{{ section.settings.text }}</p>{%- endif -%}
+    <div class="hero-cta">
+      {%- if section.settings.btn1_label != blank -%}<a href="{{ section.settings.btn1_link }}" class="btn inv">{{ section.settings.btn1_label }}</a>{%- endif -%}
+      {%- if section.settings.btn2_label != blank -%}<a href="{{ section.settings.btn2_link }}" class="btn ghost">{{ section.settings.btn2_label }}</a>{%- endif -%}
+    </div>
+  </div>
+
+  <div class="hero-dots" id="heroDots"></div>
+
+  {%- if section.settings.show_scroll -%}
+    <button class="hero-scroll" id="heroScroll" aria-label="Desplazar">
+      <span class="hs-label">{{ section.settings.scroll_label }}</span>
+      <span class="hs-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4v15"/><path d="M5 13l7 7 7-7"/></svg></span>
+    </button>
+  {%- endif -%}
+</section>
+
+<style>
+.hero-slides{position:absolute;inset:0;z-index:0;overflow:hidden}
+.hero-slide{position:absolute;inset:0;opacity:0;transition:opacity 1.3s var(--ease)}
+.hero-slide.is-active{opacity:1}
+.hero-slide .bgimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;transform:scale(1.12)}
+.hero-slide.is-active .bgimg{animation:hkb 9s ease forwards}
+@keyframes hkb{from{transform:scale(1.12)}to{transform:scale(1)}}
+.hero-slide .bgvid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.hero-slide.m-only{display:none}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.22) 0%,rgba(0,0,0,.32) 45%,rgba(0,0,0,.66) 100%);z-index:1;pointer-events:none}
+.hero-inner{z-index:2}
+.hero-fade{opacity:0;transform:translateY(16px);animation:hfade 1s var(--ease) .15s forwards}
+@keyframes hfade{to{opacity:1;transform:none}}
+.hero h1{font-size:clamp(2rem,5.5vw,4rem)!important;letter-spacing:-.02em}
+.hero .eyebrow{opacity:.78}
+.hero p{color:rgba(255,255,255,.78)}
+.hero-dots{position:absolute;left:var(--pad);bottom:clamp(22px,4vh,42px);z-index:3;display:flex;gap:10px}
+.hero-dot{width:30px;height:3px;border:0;background:rgba(255,255,255,.35);cursor:pointer;padding:0;transition:background .3s}
+.hero-dot.on{background:#fff}
+.hero-scroll{position:absolute;right:var(--pad);bottom:clamp(22px,4vh,42px);z-index:3;display:flex;align-items:center;gap:12px;background:none;border:0;cursor:pointer;color:#fff;padding:6px;opacity:.7;transition:opacity .4s ease}
+.hero-scroll:hover{opacity:1}
+.hs-label{font-family:'Oswald';text-transform:uppercase;letter-spacing:.22em;font-size:.68rem;writing-mode:vertical-rl;transform:rotate(180deg)}
+.hs-arrow{width:40px;height:40px;border:1.5px solid rgba(255,255,255,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:border-color .4s,background .4s,transform .4s ease}
+.hs-arrow svg{width:18px;height:18px;animation:hsbob 1.8s ease infinite}
+.hero-scroll:hover .hs-arrow{border-color:#fff;background:rgba(255,255,255,.08);transform:translateY(3px)}
+.hero-scroll.hide{opacity:0;pointer-events:none}
+@keyframes hsbob{0%,100%{transform:translateY(-2px)}50%{transform:translateY(3px)}}
+@media(max-width:600px){.hs-label{display:none}}
+@media(max-width:749px){
+  .hero-slide.d-only{display:none!important}
+  .hero-slide.m-only{display:block}
+}
+</style>
+
+<script>
+(function(){
+  var hero=document.getElementById('heroSec');
+  if(!hero)return;
+  var all=[].slice.call(hero.querySelectorAll('.hero-slide'));
+  var slides=all.filter(function(s){return getComputedStyle(s).display!=='none';});
+  all.forEach(function(s){s.classList.remove('is-active');});
+  if(slides.length){slides[0].classList.add('is-active');}
+  var dotsWrap=document.getElementById('heroDots');
+  dotsWrap.innerHTML='';
+  var cur=0, timer=null;
+  function go(k){ if(slides.length<2)return; slides[cur].classList.remove('is-active'); var dn=dotsWrap.children[cur]; if(dn)dn.classList.remove('on'); cur=(k+slides.length)%slides.length; slides[cur].classList.add('is-active'); var da=dotsWrap.children[cur]; if(da)da.classList.add('on'); }
+  if(slides.length>1){
+    slides.forEach(function(s,i){ var b=document.createElement('button'); b.className='hero-dot'+(i===0?' on':''); b.setAttribute('aria-label','Slide '+(i+1)); b.addEventListener('click',function(){ clearInterval(timer); go(i); timer=setInterval(function(){go(cur+1);},6000); }); dotsWrap.appendChild(b); });
+    timer=setInterval(function(){go(cur+1);},6000);
+  }
+  var btn=document.getElementById('heroScroll');
+  if(btn){
+    btn.addEventListener('click',function(){
+      var sec=hero.closest('.shopify-section');
+      var next=sec?sec.nextElementSibling:hero.nextElementSibling;
+      var top=next?next.getBoundingClientRect().top+window.scrollY:window.innerHeight;
+      window.scrollTo({top:top-60,behavior:'smooth'});
+    });
+    window.addEventListener('scroll',function(){ btn.classList.toggle('hide',window.scrollY>80); },{passive:true});
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Antetitulo" },
+    { "type": "html", "id": "title", "label": "Titulo grande" },
+    { "type": "textarea", "id": "text", "label": "Texto" },
+    { "type": "text", "id": "btn1_label", "label": "Boton 1 texto", "default": "Comprar ahora" },
+    { "type": "url", "id": "btn1_link", "label": "Boton 1 enlace" },
+    { "type": "text", "id": "btn2_label", "label": "Boton 2 texto", "default": "Ver por categoria" },
+    { "type": "url", "id": "btn2_link", "label": "Boton 2 enlace" },
+    { "type": "header", "content": "Video de fondo (opcional, MP4)" },
+    { "type": "text", "id": "video_mp4", "label": "Video MP4 (URL Shopify)" },
+    { "type": "header", "content": "Imagenes DESKTOP (horizontal)" },
+    { "type": "text", "id": "img_url", "label": "Desktop 1 (URL)" },
+    { "type": "text", "id": "img_url_2", "label": "Desktop 2 (URL)" },
+    { "type": "text", "id": "img_url_3", "label": "Desktop 3 (URL)" },
+    { "type": "header", "content": "Imagenes MOVIL (vertical)" },
+    { "type": "text", "id": "img_url_m", "label": "Movil 1 (URL)" },
+    { "type": "text", "id": "img_url_m2", "label": "Movil 2 (URL)" },
+    { "type": "text", "id": "img_url_m3", "label": "Movil 3 (URL)" },
+    { "type": "text", "id": "watermark", "label": "Marca de agua" },
+    { "type": "checkbox", "id": "show_scroll", "label": "Mostrar flecha", "default": true },
+    { "type": "text", "id": "scroll_label", "label": "Texto flecha", "default": "Desliza" }
+  ],
+  "presets": [ { "name": "Hero" } ]
+}
+{% endschema %}

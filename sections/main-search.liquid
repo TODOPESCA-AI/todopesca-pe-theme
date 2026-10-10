@@ -1,0 +1,67 @@
+{%- comment -%} Búsqueda TodoPesca (B/N, grilla de productos + paginación) {%- endcomment -%}
+<section class="sec" style="padding-top:clamp(40px,6vw,80px)">
+  <div class="wrap">
+    <h1 class="display search-h1">Búsqueda</h1>
+
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+      <input type="hidden" name="type" value="product">
+      <input type="hidden" name="options[prefix]" value="last">
+      <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Buscar señuelos, cañas, marcas…" autocomplete="off" aria-label="Buscar">
+      <button type="submit" class="btn">Buscar</button>
+    </form>
+
+    {%- if search.performed -%}
+      {%- if search.results_count > 0 -%}
+        <p class="search-count cond">{{ search.results_count }} resultado{% if search.results_count != 1 %}s{% endif %} para “{{ search.terms }}”</p>
+        {%- paginate search.results by 24 -%}
+          <div class="grid3">
+            {%- for item in search.results -%}
+              {%- if item.object_type == 'product' -%}
+                {% render 'card-product', product: item %}
+              {%- else -%}
+                <a class="search-misc" href="{{ item.url }}">
+                  <span class="k cond">{{ item.object_type }}</span>
+                  <h3>{{ item.title | truncate: 60 }}</h3>
+                </a>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          {%- if paginate.pages > 1 -%}
+            <div class="search-pager cond">
+              {%- for part in paginate.parts -%}
+                {%- if part.is_link -%}<a href="{{ part.url }}">{{ part.title }}</a>{%- else -%}<span class="on">{{ part.title }}</span>{%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        {%- endpaginate -%}
+      {%- else -%}
+        <p class="search-empty">No encontramos resultados para “{{ search.terms }}”. Prueba con otro término o revisa el <a href="/collections/all">catálogo completo</a>.</p>
+      {%- endif -%}
+    {%- else -%}
+      <p class="search-hint cond">Escribe una marca, modelo o tipo de señuelo para empezar.</p>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+.search-h1{font-size:clamp(2.2rem,7vw,4rem);margin-bottom:26px}
+.search-form{display:flex;gap:12px;border-bottom:2px solid var(--black);padding-bottom:0;margin-bottom:30px;max-width:720px;flex-wrap:wrap}
+.search-form input[type="search"]{flex:1;min-width:200px;border:0;outline:none;background:transparent;font-family:'Oswald';font-size:1.05rem;padding:14px 2px;letter-spacing:.02em}
+.search-form .btn{height:50px}
+.search-count{font-size:.82rem;letter-spacing:.06em;color:var(--grey);margin-bottom:24px}
+.search-hint,.search-empty{font-family:'Oswald';text-transform:uppercase;letter-spacing:.04em;color:var(--grey);font-size:.95rem;padding:28px 0}
+.search-empty{text-transform:none;letter-spacing:0}
+.search-empty a{border-bottom:1px solid var(--black);color:var(--black)}
+.search-misc{border:1px solid var(--line);padding:22px;display:flex;flex-direction:column;justify-content:center;min-height:160px;transition:border-color .2s}
+.search-misc:hover{border-color:var(--black)}
+.search-misc .k{font-size:.64rem;letter-spacing:.12em;color:var(--grey);margin-bottom:8px}
+.search-misc h3{font-family:'Oswald';font-weight:600;text-transform:uppercase;font-size:1.05rem;line-height:1.2}
+.search-pager{display:flex;gap:6px;justify-content:center;margin-top:46px;flex-wrap:wrap}
+.search-pager a,.search-pager span{min-width:42px;height:42px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);font-size:.85rem;transition:background .2s,color .2s,border-color .2s}
+.search-pager a:hover{border-color:var(--black)}
+.search-pager .on{background:var(--black);color:var(--white);border-color:var(--black)}
+</style>
+
+{% schema %}
+{ "name": "Búsqueda", "settings": [] }
+{% endschema %}

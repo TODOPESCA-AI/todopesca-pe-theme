@@ -1,0 +1,2 @@
+{%- comment -%} Redimensiona URLs del CDN de Shopify. Uso: {% render 'cdn-w', u: url, w: 1200 %} · opcional f: 'pjpg' convierte a JPEG progresivo (solo fotos sin transparencia) {%- endcomment -%}
+{%- if u contains 'cdn.shopify.com' -%}{%- if u contains '?' -%}{{ u }}&width={{ w }}{%- else -%}{{ u }}?width={{ w }}{%- endif -%}{%- if f != blank -%}&format={{ f }}{%- endif -%}{%- else -%}{{ u }}{%- endif -%}

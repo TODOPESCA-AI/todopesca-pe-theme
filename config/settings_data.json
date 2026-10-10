@@ -1,0 +1,62 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "current": {
+    "color_text": "#0a0a0a",
+    "color_bg": "#ffffff",
+    "page_width": 1400,
+    "dotted_bg": false,
+    "sections": {
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "blocks": {
+          "m1": {
+            "type": "mensaje",
+            "settings": {
+              "text": "Envío a todo el Perú por Shalom"
+            }
+          },
+          "m2": {
+            "type": "mensaje",
+            "settings": {
+              "text": "Producto 100% original"
+            }
+          },
+          "m3": {
+            "type": "mensaje",
+            "settings": {
+              "text": "Distribuidor oficial DUO International"
+            }
+          }
+        },
+        "block_order": [
+          "m1",
+          "m2",
+          "m3"
+        ],
+        "settings": {}
+      },
+      "header": {
+        "type": "header",
+        "settings": {
+          "logo_text": "TODOPESCA",
+          "logo": "shopify://shop_images/negrotp.png",
+          "menu": "main-menu",
+          "show_search": true
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {}
+      }
+    },
+    "content_for_index": []
+  }
+}

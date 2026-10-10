@@ -1,0 +1,86 @@
+{%- comment -%} Mosaico bento de categorías — editorial premium {%- endcomment -%}
+<section class="sec catbento">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 class="display">{{ section.settings.title }}</h2>
+      {%- if section.settings.link_url != blank -%}<a href="{{ section.settings.link_url }}">{{ section.settings.link_label }}</a>{%- endif -%}
+    </div>
+    <div class="bento">
+      {%- for block in section.blocks -%}
+        {%- assign col = collections[block.settings.coleccion] -%}
+        {%- assign img = col.products.first.featured_image -%}
+        {%- if forloop.first -%}{%- assign tw = 1400 -%}{%- else -%}{%- assign tw = 900 -%}{%- endif -%}
+        <a href="/collections/{{ block.settings.coleccion }}" class="bento-tile reveal" {{ block.shopify_attributes }}>
+          {%- if block.settings.img_url != blank -%}
+            <img src="{% render 'cdn-w', u: block.settings.img_url, w: tw %}" alt="{{ block.settings.title | escape }}" loading="lazy" decoding="async">
+          {%- elsif img -%}
+            <img src="{{ img | image_url: width: tw }}" alt="{{ block.settings.title | escape }}" loading="lazy" decoding="async">
+          {%- endif -%}
+          <span class="bt-num">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+          <div class="bt-in">
+            <span class="bt-bar"></span>
+            <h3>{{ block.settings.title }}</h3>
+            {%- if block.settings.subtitle != blank -%}<span class="bt-sub">{{ block.settings.subtitle }}</span>{%- endif -%}
+            <span class="bt-arrow">Explorar <i>→</i></span>
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+.catbento .bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:215px;gap:10px;position:relative;z-index:2}
+.bento-tile{position:relative;overflow:hidden;background:#0b0b0b;display:flex;align-items:flex-end;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.06);transition:border-color .4s var(--ease)}
+.bento-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:.78;transition:transform 1s var(--ease),opacity .5s}
+.bento-tile::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(10,10,10,.05) 0%,rgba(10,10,10,.20) 45%,rgba(10,10,10,.90) 100%);transition:background .5s}
+.bento-tile:hover img{transform:scale(1.06);opacity:.9}
+.bento-tile:hover{border-color:rgba(255,255,255,.22)}
+.bt-num{position:absolute;top:14px;right:18px;z-index:2;font-family:'Anton';font-size:2.6rem;line-height:1;color:rgba(255,255,255,.10);letter-spacing:.02em;transition:color .5s}
+.bento-tile:hover .bt-num{color:rgba(207,46,46,.55)}
+.bt-in{position:relative;z-index:2;padding:24px 22px}
+.bt-bar{display:block;width:34px;height:3px;background:#cf2e2e;margin-bottom:14px;transition:width .45s var(--ease)}
+.bento-tile:hover .bt-bar{width:60px}
+.bt-in h3{font-family:'Anton';text-transform:uppercase;font-size:clamp(1.35rem,2.3vw,2.1rem);line-height:.94;letter-spacing:.01em}
+.bt-sub{font-family:'Oswald';text-transform:uppercase;font-size:.7rem;letter-spacing:.12em;color:rgba(255,255,255,.55);display:block;margin-top:8px}
+.bt-arrow{font-family:'Oswald';text-transform:uppercase;font-size:.7rem;letter-spacing:.14em;color:#fff;display:inline-flex;align-items:center;gap:8px;margin-top:16px;opacity:0;transform:translateY(8px);transition:opacity .4s var(--ease),transform .4s var(--ease)}
+.bt-arrow i{font-style:normal;transition:transform .4s var(--ease)}
+.bento-tile:hover .bt-arrow{opacity:1;transform:none}
+.bento-tile:hover .bt-arrow i{transform:translateX(5px)}
+.bento-tile:nth-child(1){grid-column:span 2;grid-row:span 2}
+.bento-tile:nth-child(1) h3{font-size:clamp(2rem,3.4vw,3.2rem)}
+.bento-tile:nth-child(1) .bt-num{font-size:4rem}
+.bento-tile:nth-child(4){grid-column:span 2}
+.bento-tile:nth-child(5){grid-column:span 2}
+.bento-tile:nth-child(6){grid-column:span 2}
+@media(max-width:760px){
+  .catbento .bento{grid-template-columns:repeat(2,1fr);grid-auto-rows:170px;gap:8px}
+  .bento-tile:nth-child(1){grid-column:span 2;grid-row:span 1}
+  .bento-tile:nth-child(4),.bento-tile:nth-child(5),.bento-tile:nth-child(6){grid-column:span 2}
+  .bt-arrow{opacity:1;transform:none}
+}
+</style>
+
+{% schema %}
+{
+  "name": "Categorías (bento)",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "Compra por categoría" },
+    { "type": "text", "id": "link_label", "label": "Texto enlace", "default": "Ver todo el catálogo" },
+    { "type": "url", "id": "link_url", "label": "Enlace" },
+    { "type": "text", "id": "watermark", "label": "Marca de agua" }
+  ],
+  "blocks": [
+    { "type": "categoria", "name": "Categoría", "settings": [
+      { "type": "text", "id": "coleccion", "label": "Handle de la colección", "info": "Ej: duo, canas, carretes" },
+      { "type": "text", "id": "title", "label": "Título" },
+      { "type": "text", "id": "subtitle", "label": "Subtítulo" },
+      { "type": "text", "id": "img_url", "label": "URL de imagen (opcional)", "info": "Si se deja vacío usa la 1ra foto de la colección" },
+      { "type": "text", "id": "bg", "label": "Color (no usado)" }
+    ]}
+  ],
+  "max_blocks": 8,
+  "presets": [{ "name": "Categorías (bento)" }]
+}
+{% endschema %}

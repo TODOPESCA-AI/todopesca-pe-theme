@@ -1,0 +1,129 @@
+{%- comment -%} Página de colección {%- endcomment -%}
+<section class="coll-hero">
+  <span class="coll-hero-wm" aria-hidden="true">{{ collection.title | escape }}</span>
+  <div class="wrap coll-hero-in reveal">
+    {%- assign blogo = collection.metafields.brand.logo.value -%}
+    {%- if blogo != blank -%}
+      <h1 class="coll-logoh"><img class="coll-logo" src="{{ blogo }}" alt="{{ collection.title | escape }}" loading="eager"></h1>
+    {%- else -%}
+      <h1 class="display coll-hero-title">{{ collection.title }}</h1>
+    {%- endif -%}
+    <span class="coll-accent"></span>
+    {%- if section.settings.show_desc and collection.description != blank -%}
+      <div class="coll-desc">{{ collection.description }}</div>
+    {%- endif -%}
+    {%- assign brands = 'duo,major-craft,sugoi,owner,daiwa,simms,gomexus,xbraid,odz' | split: ',' -%}
+    {%- assign bnames = 'DUO,Major Craft,Sugoi,Owner,Daiwa,Simms,Gomexus,X-Braid,ODZ' | split: ',' -%}
+    <div class="coll-brands">
+      <a href="/collections/all" class="coll-chip{% if collection.handle == 'all' %} is-on{% endif %}">Todo</a>
+      {%- for h in brands -%}
+        <a href="/collections/{{ h }}" class="coll-chip{% if collection.handle == h %} is-on{% endif %}">{{ bnames[forloop.index0] }}</a>
+      {%- endfor -%}
+    </div>
+    <div class="coll-bar">
+      <span class="coll-count">{{ collection.products_count }} producto{% if collection.products_count != 1 %}s{% endif %}</span>
+      {%- if section.settings.show_sort -%}
+        <form method="get" class="coll-sort">
+          <select name="sort_by" onchange="this.form.submit()" aria-label="Ordenar por">
+            {%- assign sb = collection.sort_by | default: collection.default_sort_by -%}
+            <option value="manual" {% if sb == 'manual' %}selected{% endif %}>Destacados</option>
+            <option value="best-selling" {% if sb == 'best-selling' %}selected{% endif %}>Más vendidos</option>
+            <option value="price-ascending" {% if sb == 'price-ascending' %}selected{% endif %}>Precio: menor a mayor</option>
+            <option value="price-descending" {% if sb == 'price-descending' %}selected{% endif %}>Precio: mayor a menor</option>
+            <option value="created-descending" {% if sb == 'created-descending' %}selected{% endif %}>Novedades</option>
+            <option value="title-ascending" {% if sb == 'title-ascending' %}selected{% endif %}>A–Z</option>
+          </select>
+        </form>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:clamp(24px,4vw,44px)">
+  <div class="wrap">
+    {%- paginate collection.products by section.settings.per_page -%}
+      <div class="coll-grid reveal">
+        {%- for product in collection.products -%}
+          {% render 'card-product', product: product %}
+        {%- else -%}
+          <p>No hay productos en esta colección por ahora.</p>
+        {%- endfor -%}
+      </div>
+      {%- if paginate.pages > 1 -%}
+        <div class="coll-pag">
+          {%- for part in paginate.parts -%}
+            {%- if part.is_link -%}<a href="{{ part.url }}">{{ part.title }}</a>
+            {%- else -%}<span class="cur">{{ part.title }}</span>{%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{%- assign bvid = collection.metafields.brand.video.value -%}
+{%- if bvid != blank -%}
+  {%- assign byid = bvid -%}
+  {%- if bvid contains 'watch?v=' -%}{%- assign byid = bvid | split: 'watch?v=' | last | split: '&' | first -%}
+  {%- elsif bvid contains 'youtu.be/' -%}{%- assign byid = bvid | split: 'youtu.be/' | last | split: '?' | first -%}
+  {%- elsif bvid contains '/embed/' -%}{%- assign byid = bvid | split: '/embed/' | last | split: '?' | first -%}
+  {%- elsif bvid contains 'shorts/' -%}{%- assign byid = bvid | split: 'shorts/' | last | split: '?' | first -%}
+  {%- endif -%}
+  <section class="coll-videosec">
+    <div class="wrap">
+      <div class="coll-videosec-head"><span class="coll-videosec-eyebrow">{{ collection.title }}</span><h2 class="display">En acción</h2></div>
+      <div class="coll-video-big"><iframe src="https://www.youtube.com/embed/{{ byid }}" title="{{ collection.title | escape }}" loading="lazy" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div>
+    </div>
+  </section>
+{%- endif -%}
+
+<style>
+.coll-hero{position:relative;overflow:hidden;background:#ffffff;border-bottom:1px solid var(--line);padding:clamp(54px,8vw,104px) 0 30px;margin-bottom:6px}
+.coll-hero-wm{position:absolute;right:-1%;top:50%;transform:translateY(-50%);font-family:'Anton';font-size:clamp(6rem,21vw,17rem);line-height:.8;color:rgba(10,10,10,.05);white-space:nowrap;pointer-events:none;text-transform:uppercase;letter-spacing:-.02em;z-index:1}
+.coll-hero-in{position:relative;z-index:2}
+.coll-logoh{margin:0;line-height:0}
+.coll-logo{width:clamp(230px,30vw,400px);height:auto;max-height:150px;object-fit:contain;object-position:left center;mix-blend-mode:multiply}
+.coll-hero-title{font-size:clamp(2.6rem,8vw,6rem);line-height:.92}
+.coll-accent{display:block;width:56px;height:4px;background:#cf2e2e;margin:20px 0 0}
+.coll-desc{color:var(--grey);max-width:60ch;margin-top:16px;line-height:1.6}
+.coll-brands{display:flex;gap:8px;overflow-x:auto;margin-top:22px;padding-bottom:4px;scrollbar-width:none}
+.coll-brands::-webkit-scrollbar{display:none}
+.coll-chip{flex:0 0 auto;border:1px solid rgba(10,10,10,.18);padding:9px 18px;font-family:'Oswald';text-transform:uppercase;font-size:.74rem;letter-spacing:.06em;color:var(--black);white-space:nowrap;transition:background .25s,color .25s,border-color .25s}
+.coll-chip:hover{border-color:#cf2e2e;color:#cf2e2e}
+.coll-chip.is-on{background:var(--black);color:#fff;border-color:var(--black)}
+.coll-bar{display:flex;justify-content:space-between;align-items:center;margin-top:22px;border-top:1px solid rgba(10,10,10,.12);padding:14px 0 0}
+.coll-count{font-family:'Oswald';text-transform:uppercase;font-size:.78rem;letter-spacing:.08em;color:var(--grey)}
+.coll-sort select{border:1px solid rgba(10,10,10,.15);background:#fff;padding:9px 14px;font-family:'Oswald';text-transform:uppercase;font-size:.78rem;letter-spacing:.04em;cursor:pointer;transition:border-color .25s}
+.coll-sort select:hover{border-color:#cf2e2e}
+.coll-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:6px}
+.coll-pag{display:flex;gap:8px;justify-content:center;margin-top:48px;font-family:'Oswald'}
+.coll-pag a,.coll-pag .cur{padding:8px 14px;border:1px solid var(--line)}
+.coll-pag .cur{background:var(--black);color:#fff;border-color:var(--black)}
+.coll-videosec{background:#0a0a0a;color:#fff;padding:clamp(60px,8vw,110px) 0 clamp(48px,7vw,96px);margin-top:clamp(32px,5vw,64px);clip-path:polygon(0 2.5vw,100% 0,100% 100%,0 100%)}
+.coll-videosec-head{text-align:center;margin-bottom:clamp(24px,4vw,44px)}
+.coll-videosec-eyebrow{font-family:'Oswald';text-transform:uppercase;letter-spacing:.18em;font-size:.74rem;color:#cf2e2e;display:block;margin-bottom:10px}
+.coll-videosec .display{color:#fff;font-size:clamp(2rem,5vw,3.4rem);line-height:1}
+.coll-video-big{position:relative;padding-bottom:56.25%;height:0;max-width:1040px;margin:0 auto;overflow:hidden;border:1px solid rgba(255,255,255,.12)}
+.coll-video-big iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+@media(max-width:1000px){.coll-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.coll-videosec{clip-path:polygon(0 6vw,100% 0,100% 100%,0 100%)}}
+@media(max-width:700px){.coll-grid{grid-template-columns:repeat(2,1fr)}.coll-logo{width:200px}}
+</style>
+
+{%- comment -%} TP: solo la caja de la foto del producto en negro para X-Braid (no la página) {%- endcomment -%}
+{%- if collection.handle == 'xbraid' -%}
+<style>
+  .pcard .ph{background:#0a0a0a !important}
+</style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Colección",
+  "settings": [
+    { "type": "checkbox", "id": "show_desc", "label": "Mostrar descripción", "default": true },
+    { "type": "checkbox", "id": "show_sort", "label": "Mostrar ordenar por", "default": true },
+    { "type": "range", "id": "per_page", "min": 8, "max": 48, "step": 4, "label": "Productos por página", "default": 24 }
+  ]
+}
+{% endschema %}

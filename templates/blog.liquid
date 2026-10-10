@@ -1,0 +1,26 @@
+{%- comment -%} Blog {%- endcomment -%}
+<section class="sec" style="padding-top:clamp(40px,6vw,80px)">
+  <div class="wrap">
+    <div class="sec-head reveal" style="display:block"><h1 class="display">{{ blog.title }}</h1></div>
+    <div class="coll-grid2 reveal">
+      {%- for article in blog.articles -%}
+        <a class="bcard" href="{{ article.url }}">
+          {%- if article.image -%}<div class="bimg"><img src="{{ article.image | image_url: width: 800 }}" alt="{{ article.title }}"></div>{%- endif -%}
+          <div class="bmeta">{{ article.published_at | date: '%d %b, %Y' }}</div>
+          <h3>{{ article.title }}</h3>
+          <p>{{ article.excerpt_or_content | strip_html | truncatewords: 22 }}</p>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+<style>
+.coll-grid2{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.bimg{aspect-ratio:16/10;overflow:hidden;background:var(--g1);margin-bottom:14px}
+.bimg img{width:100%;height:100%;object-fit:cover}
+.bmeta{font-family:'Oswald';text-transform:uppercase;font-size:.72rem;letter-spacing:.1em;color:var(--grey)}
+.bcard h3{font-family:'Oswald';text-transform:uppercase;font-size:1.15rem;margin:6px 0 8px}
+.bcard p{color:var(--grey);font-size:.92rem;line-height:1.55}
+@media(max-width:900px){.coll-grid2{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.coll-grid2{grid-template-columns:1fr}}
+</style>

@@ -1,0 +1,24 @@
+{%- comment -%} Tarjeta de producto reutilizable. Uso: {% render 'card-product', product: product %} {%- endcomment -%}
+{%- assign _tags = product.tags | join: ',' | downcase -%}
+<a class="pcard" href="{{ product.url }}">
+  <div class="ph">
+    {%- if _tags contains 'preventa' or _tags contains 'reserva' -%}
+      <span class="tag" style="background:#0a0a0a;color:#fff">Preventa</span>
+    {%- elsif product.compare_at_price > product.price -%}
+      <span class="tag">Oferta</span>
+    {%- endif -%}
+    {%- if product.featured_image -%}
+      <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title | escape }}" width="{{ product.featured_image.width }}" height="{{ product.featured_image.height }}" loading="lazy" decoding="async" style="object-fit:contain;padding:6%">
+    {%- endif -%}
+  </div>
+  {%- if product.vendor != blank -%}<div class="k">{{ product.vendor }}</div>{%- endif -%}
+  <h3>{{ product.title }}</h3>
+  <div class="price">
+    {%- if _tags contains 'ocultar-precio' -%}
+      <span class="consultar-precio">Consultar precio</span>
+    {%- else -%}
+      {%- if product.compare_at_price > product.price -%}<s>{{ product.compare_at_price | money }}</s>{%- endif -%}
+      {%- if product.price_varies -%}Desde {% endif %}{{ product.price | money }}
+    {%- endif -%}
+  </div>
+</a>

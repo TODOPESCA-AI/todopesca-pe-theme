@@ -1,0 +1,124 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "",
+        "title": "",
+        "text": "",
+        "btn1_label": "Comprar ahora →",
+        "btn1_link": "/collections/all",
+        "btn2_label": "Ver por categoría",
+        "btn2_link": "/collections/all",
+        "video_mp4": "",
+        "img_url": "https://cdn.shopify.com/s/files/1/0624/3496/7606/files/Create_a_cinematographic_202511270126.jpg?v=1781202587",
+        "img_url_2": "https://cdn.shopify.com/s/files/1/0624/3496/7606/files/corvina_senuelo_duo_4K.jpg?v=1781419454",
+        "img_url_3": "https://cdn.shopify.com/s/files/1/0624/3496/7606/files/Generated_Image_September_07_2025_-_1_56AM.jpg?v=1781368389",
+        "img_url_m": "https://cdn.shopify.com/s/files/1/0624/3496/7606/files/duocuadroweb.png?v=1781209830",
+        "img_url_m2": "https://cdn.shopify.com/s/files/1/0624/3496/7606/files/simmscuadroweb.png?v=1781210279",
+        "img_url_m3": "https://cdn.shopify.com/s/files/1/0624/3496/7606/files/xbraidcuadroweb.png?v=1781209997",
+        "watermark": "",
+        "show_scroll": true,
+        "scroll_label": "Desliza"
+      }
+    },
+    "ticker": {
+      "type": "brand-ticker",
+      "blocks": {
+        "b1": { "type": "marca", "settings": { "text": "DUO INTERNATIONAL", "bold": true } },
+        "b2": { "type": "marca", "settings": { "text": "MAJOR CRAFT", "bold": true } },
+        "b3": { "type": "marca", "settings": { "text": "OWNER", "bold": true } },
+        "b4": { "type": "marca", "settings": { "text": "DAIWA", "bold": false } },
+        "b5": { "type": "marca", "settings": { "text": "SIMMS", "bold": false } },
+        "b6": { "type": "marca", "settings": { "text": "X-BRAID", "bold": false } },
+        "b7": { "type": "marca", "settings": { "text": "GOMEXUS", "bold": false } }
+      },
+      "block_order": [ "b1", "b2", "b3", "b4", "b5", "b6", "b7" ],
+      "settings": {}
+    },
+    "categorias": {
+      "type": "category-scroll",
+      "blocks": {
+        "c1": { "type": "categoria", "settings": { "coleccion": "duo", "title": "Señuelos", "subtitle": "DUO · Hard Minnow · Softbait", "img_url": "https://cdn.shopify.com/s/files/1/0624/3496/7606/files/corvina_senuelo_duo_4K.jpg?v=1781419454", "bg": "#0a0a0a" } },
+        "c4": { "type": "categoria", "settings": { "coleccion": "lineas", "title": "Líneas", "subtitle": "X-Braid · Owner · Trenzados", "bg": "#101010" } },
+        "c3": { "type": "categoria", "settings": { "coleccion": "carretes", "title": "Carretes", "subtitle": "Daiwa · Gomexus", "bg": "#1c1c1c" } },
+        "c2": { "type": "categoria", "settings": { "coleccion": "canas", "title": "Cañas", "subtitle": "Major Craft · Surf · Jigging", "img_url": "https://cdn.shopify.com/s/files/1/0624/3496/7606/files/TD5-main1968x748.jpg?v=1781421098", "bg": "#141414" } },
+        "c5": { "type": "categoria", "settings": { "coleccion": "simms", "title": "Vestimenta", "subtitle": "Simms · Waders · Calzado", "img_url": "https://cdn.shopify.com/s/files/1/0624/3496/7606/files/SIMMS_REDES.png?v=1781421501", "bg": "#1a1a1a" } },
+        "c6": { "type": "categoria", "settings": { "coleccion": "accesorios", "title": "Accesorios", "subtitle": "Anzuelos · Rings · Cases", "img_url": "https://cdn.shopify.com/s/files/1/0624/3496/7606/files/IW18BKGD.jpg", "bg": "#0f0f0f" } }
+      },
+      "block_order": [ "c1", "c4", "c3", "c2", "c5", "c6" ],
+      "settings": { "title": "Compra por categoría", "link_label": "Ver todo el catálogo", "link_url": "/collections/all", "watermark": "" }
+    },
+    "feature": {
+      "type": "feature-banner",
+      "settings": {
+        "eyebrow": "La marca insignia",
+        "title": "El estándar técnico, no la imitación",
+        "text": "Cada señuelo DUO se afina en el túnel de pruebas de Yaizu. Acción, balance y acabado que las copias no replican. Por eso somos el distribuidor exclusivo en Perú.",
+        "btn_label": "Explorar DUO →",
+        "btn_link": "/collections/duo",
+        "bg_image": "shopify://shop_images/Generated_Image_September_07_2025_-_1_56AM.jpg",
+        "watermark": "",
+        "height": 80
+      }
+    },
+    "destacados": {
+      "type": "featured-products",
+      "blocks": {
+        "p1": { "type": "producto", "settings": { "product": "duo-beach-walker-120md", "kicker": "Surfcasting", "tag": "", "title": "", "link": "" } },
+        "p2": { "type": "producto", "settings": { "product": "duo-realis-jerkbait-120s-sw", "kicker": "Jerkbait SW", "tag": "", "title": "", "link": "" } },
+        "p3": { "type": "producto", "settings": { "product": "duo-realis-jerkbait-130s-sw", "kicker": "Jerkbait SW", "tag": "", "title": "", "link": "" } }
+      },
+      "block_order": [ "p1", "p2", "p3" ],
+      "settings": { "title": "Lo más buscado", "link_label": "Bestsellers", "link_url": "/collections/duo", "bg_image": "https://cdn.shopify.com/s/files/1/0624/3496/7606/files/Generated_Image_September_07_2025_-_1_56AM.jpg?v=1781368389", "video_mp4": "", "watermark": "DUO" }
+    },
+    "videos": {
+      "type": "video-gallery",
+      "blocks": {
+        "v1": { "type": "video", "settings": { "video_url": "https://www.youtube.com/watch?v=eeodNCrFhCI", "title": "Tide Minnow Slim 175 & 200 en acción" } },
+        "v2": { "type": "video", "settings": { "video_url": "https://www.youtube.com/watch?v=v5ZukLTd47U", "title": "Realis Minnow — Lures in Motion" } },
+        "v3": { "type": "video", "settings": { "video_url": "https://www.youtube.com/watch?v=cbPk822kKpk", "title": "Señuelos DUO en acción" } }
+      },
+      "block_order": [ "v1", "v2", "v3" ],
+      "settings": { "title": "DUO en acción", "link_label": "Ver canal DUO", "link_url": "https://www.youtube.com/user/DUOJPN" }
+    },
+    "majorcraft": {
+      "type": "promo-band",
+      "settings": {
+        "title": "MAJOR CRAFT",
+        "logo": "https://cdn.shopify.com/s/files/1/0624/3496/7606/files/New_Major_Craft_Symbol_Mark_black.png?v=1781411584",
+        "bg_image": "https://cdn.shopify.com/s/files/1/0624/3496/7606/files/GK5-main1968x748.jpg?v=1781417195",
+        "text": "Cañas de acción técnica japonesa: blanks de carbono y anillas Fuji. Crostage, Ceana, Giant Killing y más, para shore jigging, spinning y slow jigging.",
+        "btn_label": "Explorar Major Craft →",
+        "btn_link": "/collections/major-craft",
+        "watermark": ""
+      }
+    },
+    "trust": {
+      "type": "trust-bar",
+      "blocks": {
+        "t1": { "type": "item", "settings": { "number": "+200", "title": "Productos", "text": "Catálogo premium de Japón y USA con stock local en Perú." } },
+        "t2": { "type": "item", "settings": { "number": "100%", "title": "Original", "text": "Producto auténtico con respaldo de marca. Nada de réplicas." } },
+        "t3": { "type": "item", "settings": { "number": "24h", "title": "Despacho", "text": "Pedidos verificados salen el mismo día hábil." } }
+      },
+      "block_order": [ "t1", "t2", "t3" ],
+      "settings": { "watermark": "" }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "title": "Entra al cardumen",
+        "text": "Lanzamientos, restocks y precios de distribuidor antes que nadie.",
+        "placeholder": "tu@correo.com",
+        "btn_label": "Unirme",
+        "success": "¡Listo! Ya estás dentro."
+      }
+    }
+  },
+  "order": [ "hero", "ticker", "categorias", "feature", "destacados", "videos", "majorcraft", "trust", "newsletter" ]
+}

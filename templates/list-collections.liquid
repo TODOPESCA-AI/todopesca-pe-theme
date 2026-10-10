@@ -1,0 +1,19 @@
+{%- comment -%} Listado de todas las colecciones {%- endcomment -%}
+<section class="sec" style="padding-top:clamp(40px,6vw,80px)">
+  <div class="wrap">
+    <div class="sec-head reveal"><h1 class="display">Catálogo</h1></div>
+    <div class="coll-grid2 reveal">
+      {%- for collection in collections -%}
+        <a class="cat-card" href="{{ collection.url }}" style="aspect-ratio:4/3">
+          {%- if collection.featured_image -%}<img src="{{ collection.featured_image | image_url: width: 700 }}" alt="{{ collection.title }}">{%- endif -%}
+          <div class="cat-card-inner"><h3>{{ collection.title }}</h3><div class="arrow">{{ collection.products_count }} productos →</div></div>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+<style>
+.coll-grid2{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:900px){.coll-grid2{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.coll-grid2{grid-template-columns:1fr}}
+</style>

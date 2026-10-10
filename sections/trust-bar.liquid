@@ -1,0 +1,46 @@
+{%- comment -%} Barra de confianza {%- endcomment -%}
+<section class="sec">
+  {%- if section.settings.watermark != blank -%}<div class="wm" data-px="0.14">{{ section.settings.watermark }}</div>{%- endif -%}
+  <div class="wrap">
+    <div class="trust reveal">
+      {%- for block in section.blocks -%}
+        <div>
+          <div class="n">{{ block.settings.number }}</div>
+          <h4>{{ block.settings.title }}</h4>
+          <p>{{ block.settings.text }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Barra de confianza",
+  "settings": [
+    { "type": "text", "id": "watermark", "label": "Marca de agua", "default": "ORIGINAL" }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Columna",
+      "settings": [
+        { "type": "text", "id": "number", "label": "Número / dato", "default": "3" },
+        { "type": "text", "id": "title", "label": "Título", "default": "Países" },
+        { "type": "textarea", "id": "text", "label": "Texto", "default": "Operación directa en Perú, Chile y Ecuador con stock local." }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Barra de confianza",
+      "blocks": [
+        { "type": "item", "settings": { "number": "3", "title": "Países", "text": "Operación directa en Perú, Chile y Ecuador con stock local." } },
+        { "type": "item", "settings": { "number": "100%", "title": "Original", "text": "Producto auténtico con respaldo de marca. Nada de réplicas." } },
+        { "type": "item", "settings": { "number": "24h", "title": "Despacho", "text": "Pedidos verificados salen el mismo día hábil." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,11 @@
+{%- comment -%} Gift card {%- endcomment -%}
+<section class="sec" style="padding-top:clamp(40px,6vw,80px);text-align:center">
+  <div class="wrap" style="max-width:520px">
+    <div class="bmeta" style="font-family:'Oswald';text-transform:uppercase;letter-spacing:.12em;color:var(--grey)">{{ shop.name }}</div>
+    <h1 class="display" style="font-size:clamp(2rem,7vw,3.4rem);margin:8px 0 18px">Tarjeta de regalo</h1>
+    <div style="font-family:'Oswald';font-size:2.4rem;margin-bottom:10px">{{ gift_card.initial_value | money }}</div>
+    {%- if gift_card.qr_identifier -%}<img src="{{ gift_card.qr_identifier }}" alt="QR" style="margin:18px auto">{%- endif -%}
+    <div style="font-family:'Oswald';letter-spacing:.2em;border:1.5px solid var(--black);padding:14px;margin:18px 0">{{ gift_card.code | format_code }}</div>
+    <p style="color:var(--grey)">Saldo actual: {{ gift_card.balance | money }}</p>
+  </div>
+</section>

@@ -1,0 +1,96 @@
+{%- comment -%} Open Graph / Twitter (vista previa al compartir en WhatsApp, Facebook) + datos estructurados JSON-LD para Google {%- endcomment -%}
+{%- liquid
+  assign og_title = page_title | default: shop.name
+  assign og_type = 'website'
+  assign og_desc = page_description | default: shop.description
+  assign og_image = page_image
+  assign _t = ''
+  if request.page_type == 'product'
+    assign og_type = 'product'
+    assign _t = product.tags | join: ',' | downcase
+    if product.featured_image
+      assign og_image = product.featured_image
+    endif
+  elsif request.page_type == 'collection' and collection.image
+    assign og_image = collection.image
+  endif
+-%}
+<meta property="og:site_name" content="{{ shop.name | escape }}">
+<meta property="og:url" content="{{ canonical_url }}">
+<meta property="og:title" content="{{ og_title | escape }}">
+<meta property="og:type" content="{{ og_type }}">
+{%- if og_desc != blank %}
+<meta property="og:description" content="{{ og_desc | strip_html | strip_newlines | escape }}">
+{%- endif %}
+{%- if og_image %}
+<meta property="og:image" content="https:{{ og_image | image_url: width: 1200 }}">
+<meta property="og:image:secure_url" content="https:{{ og_image | image_url: width: 1200 }}">
+<meta property="og:image:alt" content="{{ og_title | escape }}">
+{%- endif %}
+{%- if request.page_type == 'product' %}
+  {%- unless _t contains 'ocultar-precio' %}
+<meta property="og:price:amount" content="{{ product.selected_or_first_available_variant.price | divided_by: 100.0 }}">
+<meta property="og:price:currency" content="{{ cart.currency.iso_code }}">
+  {%- endunless %}
+{%- endif %}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ og_title | escape }}">
+{%- if og_desc != blank %}
+<meta name="twitter:description" content="{{ og_desc | strip_html | strip_newlines | escape }}">
+{%- endif %}
+
+{%- if request.page_type == 'product' -%}
+{%- assign _v0 = product.selected_or_first_available_variant -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "url": {{ shop.url | append: product.url | json }},
+  {%- if product.featured_image %}
+  "image": [{{ product.featured_image | image_url: width: 1200 | prepend: 'https:' | json }}],
+  {%- endif %}
+  "description": {{ product.description | strip_html | strip_newlines | truncate: 500 | json }},
+  {%- if product.vendor != blank %}
+  "brand": { "@type": "Brand", "name": {{ product.vendor | json }} },
+  {%- endif %}
+  {%- if _v0.sku != blank %}
+  "sku": {{ _v0.sku | json }},
+  {%- endif %}
+  {%- unless _t contains 'ocultar-precio' %}
+  "offers": [
+    {%- for v in product.variants %}
+    {
+      "@type": "Offer",
+      {%- if v.sku != blank %}
+      "sku": {{ v.sku | json }},
+      {%- endif %}
+      "name": {{ v.title | json }},
+      "price": {{ v.price | divided_by: 100.0 | json }},
+      "priceCurrency": {{ cart.currency.iso_code | json }},
+      "availability": "https://schema.org/{% if v.available %}{% if _t contains 'preventa' or _t contains 'reserva' %}PreOrder{% else %}InStock{% endif %}{% else %}OutOfStock{% endif %}",
+      "itemCondition": "https://schema.org/NewCondition",
+      "url": {{ shop.url | append: v.url | json }},
+      "seller": { "@type": "Organization", "name": {{ shop.name | json }} }
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ],
+  {%- endunless %}
+  "category": {{ product.type | json }}
+}
+</script>
+{%- endif -%}
+
+{%- if request.page_type == 'index' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": {{ shop.name | json }},
+  "url": {{ shop.url | json }},
+  "email": "ventas@todopescashop.com",
+  "telephone": "+51907665800",
+  "sameAs": ["https://instagram.com/todopesca", "https://youtube.com/@todopescatv", "https://tiktok.com/@todopesca", "https://facebook.com/todopescashop"]
+}
+</script>
+{%- endif -%}

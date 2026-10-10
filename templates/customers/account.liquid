@@ -1,0 +1,24 @@
+{%- comment -%} Cuenta {%- endcomment -%}
+<section class="sec" style="padding-top:clamp(40px,6vw,80px)">
+  <div class="wrap">
+    <div class="sec-head"><h1 class="display">Hola, {{ customer.first_name | default: 'pescador' }}</h1><a href="{{ routes.account_logout_url }}">Cerrar sesión</a></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:30px">
+      <div>
+        <h3 style="font-family:'Oswald';text-transform:uppercase;margin-bottom:14px">Pedidos</h3>
+        {%- if customer.orders.size > 0 -%}
+          <table class="acct-table"><thead><tr><th>Pedido</th><th>Fecha</th><th>Total</th><th>Estado</th></tr></thead><tbody>
+          {%- for order in customer.orders -%}
+            <tr><td><a href="{{ order.customer_url }}" style="text-decoration:underline">{{ order.name }}</a></td><td>{{ order.created_at | date: '%d/%m/%y' }}</td><td>{{ order.total_price | money }}</td><td>{{ order.financial_status_label }}</td></tr>
+          {%- endfor -%}
+          </tbody></table>
+        {%- else -%}<p style="color:var(--grey)">Aún no tienes pedidos.</p>{%- endif -%}
+      </div>
+      <div>
+        <h3 style="font-family:'Oswald';text-transform:uppercase;margin-bottom:14px">Dirección</h3>
+        {%- if customer.default_address -%}<p style="line-height:1.6">{{ customer.default_address | format_address }}</p>{%- endif -%}
+        <a href="{{ routes.account_addresses_url }}" class="btn outline" style="margin-top:14px">Editar direcciones</a>
+      </div>
+    </div>
+  </div>
+</section>
+<style>.acct-table{width:100%;border-collapse:collapse;font-size:.92rem}.acct-table th{text-align:left;font-family:'Oswald';text-transform:uppercase;font-size:.74rem;letter-spacing:.06em;border-bottom:1.5px solid var(--black);padding:10px 8px}.acct-table td{padding:12px 8px;border-bottom:1px solid var(--line)}@media(max-width:700px){.wrap>div{grid-template-columns:1fr!important}}</style>

@@ -1,0 +1,38 @@
+{%- comment -%} Banda promocional centrada (con imagen y logo) {%- endcomment -%}
+<section class="band sec band-promo" style="padding:0">
+  {%- if section.settings.bg_image != blank -%}<img class="band-bg" src="{{ section.settings.bg_image }}" alt="" loading="lazy">{%- endif -%}
+  {%- if section.settings.watermark != blank -%}<div class="wm light" data-px="0.10">{{ section.settings.watermark }}</div>{%- endif -%}
+  <div class="wrap reveal" style="padding:clamp(72px,10vw,132px) var(--pad)">
+    {%- if section.settings.logo != blank -%}
+      <img class="band-logo" src="{{ section.settings.logo }}" alt="{{ section.settings.title | escape }}" loading="lazy">
+    {%- else -%}
+      <h2 class="display">{{ section.settings.title }}</h2>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}<p>{{ section.settings.text }}</p>{%- endif -%}
+    {%- if section.settings.btn_label != blank -%}<a href="{{ section.settings.btn_link }}" class="btn inv">{{ section.settings.btn_label }}</a>{%- endif -%}
+  </div>
+</section>
+
+<style>
+.band-promo{position:relative;overflow:hidden}
+.band-promo .band-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.38;z-index:0}
+.band-promo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,.5) 0%,rgba(8,8,8,.78) 100%);z-index:1;pointer-events:none}
+.band-promo .wrap{position:relative;z-index:2}
+.band-promo .band-logo{height:clamp(56px,7.5vw,104px);width:auto;max-width:88%;display:block;margin:0 auto 22px;filter:brightness(0) invert(1)}
+</style>
+
+{% schema %}
+{
+  "name": "Banda promocional",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "Major Craft" },
+    { "type": "text", "id": "logo", "label": "Logo (URL) — se muestra en blanco" },
+    { "type": "text", "id": "bg_image", "label": "Imagen de fondo (URL)" },
+    { "type": "textarea", "id": "text", "label": "Texto" },
+    { "type": "text", "id": "btn_label", "label": "Botón — texto", "default": "Explorar Major Craft →" },
+    { "type": "url", "id": "btn_link", "label": "Botón — enlace" },
+    { "type": "text", "id": "watermark", "label": "Marca de agua" }
+  ],
+  "presets": [ { "name": "Banda promocional" } ]
+}
+{% endschema %}

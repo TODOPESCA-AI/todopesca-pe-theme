@@ -1,0 +1,52 @@
+{%- comment -%} Galería de videos (YouTube) {%- endcomment -%}
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 class="display">{{ section.settings.title }}</h2>
+      {%- if section.settings.link_url != blank -%}<a href="{{ section.settings.link_url }}" target="_blank" rel="noopener">{{ section.settings.link_label }}</a>{%- endif -%}
+    </div>
+    <div class="vgrid">
+      {%- for block in section.blocks -%}
+        {%- assign vurl = block.settings.video_url -%}
+        {%- assign yid = '' -%}
+        {%- if vurl contains 'watch?v=' -%}{%- assign yid = vurl | split: 'watch?v=' | last | split: '&' | first -%}
+        {%- elsif vurl contains 'youtu.be/' -%}{%- assign yid = vurl | split: 'youtu.be/' | last | split: '?' | first -%}
+        {%- elsif vurl contains '/embed/' -%}{%- assign yid = vurl | split: '/embed/' | last | split: '?' | first -%}
+        {%- elsif vurl contains '/shorts/' -%}{%- assign yid = vurl | split: '/shorts/' | last | split: '?' | first -%}
+        {%- else -%}{%- assign yid = vurl -%}{%- endif -%}
+        <div class="vcard reveal" {{ block.shopify_attributes }}>
+          <div class="vframe">
+            {%- if yid != blank -%}<iframe src="https://www.youtube.com/embed/{{ yid }}" title="{{ block.settings.title | escape }}" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>{%- endif -%}
+          </div>
+          {%- if block.settings.title != blank -%}<div class="vtitle">{{ block.settings.title }}</div>{%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+<style>
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;position:relative;z-index:2}
+@media(max-width:820px){.vgrid{grid-template-columns:1fr}}
+.vframe{position:relative;width:100%;aspect-ratio:16/9;background:#000;overflow:hidden;border:1px solid var(--line)}
+.vframe iframe{position:absolute;inset:0;width:100%;height:100%}
+.vtitle{font-family:'Oswald';text-transform:uppercase;font-size:.88rem;letter-spacing:.04em;margin-top:10px;color:var(--black)}
+</style>
+{% schema %}
+{
+  "name": "Galería de videos",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "DUO en acción" },
+    { "type": "text", "id": "link_label", "label": "Texto del enlace", "default": "Ver canal DUO" },
+    { "type": "url", "id": "link_url", "label": "Enlace (canal de YouTube)" }
+  ],
+  "blocks": [
+    { "type": "video", "name": "Video", "settings": [
+      { "type": "text", "id": "video_url", "label": "Link de YouTube", "info": "Pega el link del video (youtube.com/watch?v=... o youtu.be/...)" },
+      { "type": "text", "id": "title", "label": "Título del video" }
+    ]}
+  ],
+  "max_blocks": 12,
+  "presets": [{ "name": "Galería de videos", "blocks": [{"type":"video"},{"type":"video"},{"type":"video"}] }]
+}
+{% endschema %}

@@ -1,0 +1,277 @@
+{%- comment -%} Ficha de producto {%- endcomment -%}
+{%- assign _tags = product.tags | join: ',' | downcase -%}
+{%- assign is_preventa = false -%}
+{%- if _tags contains 'preventa' or _tags contains 'reserva' -%}{%- assign is_preventa = true -%}{%- endif -%}
+{%- assign is_ocultar = false -%}
+{%- if _tags contains 'ocultar-precio' -%}{%- assign is_ocultar = true -%}{%- endif -%}
+{%- assign cv = product.selected_or_first_available_variant -%}
+{%- assign main_img = product.featured_image -%}
+{%- if cv.featured_image -%}{%- assign main_img = cv.featured_image -%}{%- endif -%}
+<section class="sec" style="padding-top:clamp(32px,5vw,64px)">
+  <div class="wrap">
+    <div class="pdp">
+      <div class="pdp-gallery">
+        {%- if main_img -%}
+          <div class="pdp-main"><img id="pdpMain" src="{{ main_img | image_url: width: 1200 }}" alt="{{ product.title | escape }}" width="{{ main_img.width }}" height="{{ main_img.height }}" fetchpriority="high"></div>
+        {%- endif -%}
+        {%- if product.images.size > 1 -%}
+          <div class="pdp-thumbs">
+            {%- for image in product.images -%}
+              <button type="button" class="pdp-thumb" data-src="{{ image | image_url: width: 1200 }}" aria-label="Ver imagen {{ forloop.index }}"><img src="{{ image | image_url: width: 200 }}" alt="{{ product.title | escape }} {{ forloop.index }}" width="64" height="64" loading="lazy" decoding="async"></button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="pdp-info reveal">
+        {%- if product.vendor != blank -%}<div class="pdp-vendor">{{ product.vendor }}</div>{%- endif -%}
+        {%- if is_preventa -%}<div class="pdp-preventa">Preventa · entrega al próximo embarque</div>{%- endif -%}
+        <h1 class="pdp-title display">{{ product.title }}</h1>
+
+        <div class="pdp-price">
+          {%- if is_ocultar -%}
+            <span id="pdpPrice" class="consultar-precio">Consultar precio</span>
+          {%- else -%}
+            {%- if cv.compare_at_price > cv.price -%}<s>{{ cv.compare_at_price | money }}</s>{%- endif -%}
+            <span id="pdpPrice">{{ cv.price | money }}</span>
+          {%- endif -%}
+        </div>
+
+        <div class="pdp-sku" id="pdpSkuWrap"{% if cv.sku == blank %} hidden{% endif %}>SKU: <span id="pdpSku">{{ cv.sku }}</span></div>
+
+        {%- form 'product', product, id: 'pform' -%}
+          {%- unless product.has_only_default_variant -%}
+            <div class="pdp-variants">
+              <label class="pdp-label" for="pdpVariant">{{ section.settings.variant_label }}</label>
+              <select name="id" id="pdpVariant" class="pdp-select">
+                {%- for variant in product.variants -%}
+                  {%- capture v_img -%}{%- if variant.featured_image -%}{{ variant.featured_image | image_url: width: 1200 }}{%- endif -%}{%- endcapture -%}
+                  {%- capture v_cmp -%}{%- if variant.compare_at_price > variant.price -%}{{ variant.compare_at_price | money }}{%- endif -%}{%- endcapture -%}
+                  <option value="{{ variant.id }}"{% if variant.id == cv.id %} selected{% endif %}{% unless variant.available %} disabled{% endunless %} data-price="{{ variant.price | money | escape }}" data-compare="{{ v_cmp | escape }}" data-sku="{{ variant.sku | escape }}" data-img="{{ v_img }}">
+                    {{ variant.title }}{% unless variant.available %} — Agotado{% endunless %}
+                  </option>
+                {%- endfor -%}
+              </select>
+            </div>
+          {%- else -%}
+            <input type="hidden" name="id" value="{{ cv.id }}">
+          {%- endunless -%}
+
+          <div class="pdp-actions">
+            {%- unless is_ocultar -%}
+            <button type="submit" class="btn" {% unless product.available %}disabled{% endunless %}>
+              {%- if is_preventa and product.available -%}Reservar (preventa){%- elsif product.available -%}{{ section.settings.add_label }}{%- else -%}Agotado{%- endif -%}
+            </button>
+            {%- endunless -%}
+            {%- if section.settings.whatsapp != blank -%}
+              <a class="btn outline" target="_blank" rel="noopener"
+                 href="https://wa.me/{{ section.settings.whatsapp }}?text={{ 'Hola, me interesa: ' | append: product.title | append: ' — ' | append: shop.url | append: product.url | url_encode }}">
+                {%- if is_ocultar -%}Consultar precio por WhatsApp{%- else -%}{{ section.settings.whatsapp_label }}{%- endif -%}
+              </a>
+            {%- endif -%}
+          </div>
+          {%- if is_preventa -%}<p class="pdp-preventa-note">Producto en preventa: se entrega al llegar el próximo embarque. Te confirmamos la fecha estimada al validar tu pedido.</p>{%- endif -%}
+        {%- endform -%}
+
+       <div class="pdp-acc">
+  {%- assign _parts = product.description | split: '<h4>Especificaciones técnicas</h4>' -%}
+  {%- assign s = product.metafields.specs -%}
+  {%- assign sm = product.metafields.simms_specs -%}
+  {%- if _parts[0] != blank -%}
+    <details open><summary>Descripción</summary><div class="pdp-rte">{{ _parts[0] }}</div></details>
+  {%- endif -%}
+  {%- for block in section.blocks -%}
+    <details {{ block.shopify_attributes }}{% if block.settings.title contains 'écnic' %} open{% endif %}>
+      <summary>{{ block.settings.title }}</summary>
+      <div class="pdp-rte">
+        {%- if block.settings.title contains 'écnic' -%}
+          {%- assign has_specs = false -%}
+          {%- if s.clase.value != blank or s.tipo.value != blank or s.tipo_reel.value != blank or s.longitud_mm.value != blank or s.peso.value != blank or s.cuerpo.value != blank or s.tecnologias.value != blank or s.uso.value != blank or s.origen.value != blank or s.tabla_tamanos.value != blank or sm.material_principal.value != blank or sm.tipo.value != blank or sm.capas.value != blank or sm.capacidad.value != blank or sm.peso.value != blank -%}{%- assign has_specs = true -%}{%- endif -%}
+          {%- if has_specs -%}
+            {%- if s.tabla_tamanos.value != blank -%}
+              <div class="pdp-tablewrap"><table class="pdp-spectable"><thead><tr><th>Modelo</th><th>Ratio</th><th>Capacidad</th><th>Rodam.</th><th>Freno</th><th>Peso</th></tr></thead><tbody>
+              {%- for row in s.tabla_tamanos.value -%}<tr><td>{{ row.t }}</td><td>{{ row.ratio }}</td><td>{{ row.cap }}</td><td>{{ row.rod }}</td><td>{{ row.freno }}</td><td>{{ row.peso }}</td></tr>{%- endfor -%}
+              </tbody></table></div>
+            {%- endif -%}
+            <table class="pdp-spectable"><tbody>
+            {%- if s.clase.value != blank -%}<tr><th>Clase</th><td>{{ s.clase.value }}</td></tr>{%- endif -%}
+            {%- if s.tipo.value != blank -%}<tr><th>Tipo</th><td>{{ s.tipo.value }}</td></tr>{%- endif -%}
+            {%- if s.tipo_reel.value != blank -%}<tr><th>Tipo</th><td>{{ s.tipo_reel.value }}</td></tr>{%- endif -%}
+            {%- if s.longitud_mm.value != blank -%}<tr><th>Longitud</th><td>{{ s.longitud_mm.value }} mm</td></tr>{%- endif -%}
+            {%- if s.peso.value != blank -%}<tr><th>Peso</th><td>{{ s.peso.value }} g</td></tr>{%- endif -%}
+            {%- if s.cuerpo.value != blank -%}<tr><th>Cuerpo</th><td>{{ s.cuerpo.value }}</td></tr>{%- endif -%}
+            {%- if s.tecnologias.value != blank -%}<tr><th>Tecnologías</th><td>{{ s.tecnologias.value }}</td></tr>{%- endif -%}
+            {%- if s.uso.value != blank -%}<tr><th>Uso</th><td>{{ s.uso.value }}</td></tr>{%- endif -%}
+            {%- if sm.material_principal.value != blank -%}<tr><th>Material</th><td>{{ sm.material_principal.value }}</td></tr>{%- endif -%}
+            {%- if sm.tipo.value != blank -%}<tr><th>Tipo</th><td>{{ sm.tipo.value }}</td></tr>{%- endif -%}
+            {%- if sm.capas.value != blank -%}<tr><th>Capas</th><td>{{ sm.capas.value }}</td></tr>{%- endif -%}
+            {%- if sm.capacidad.value != blank -%}<tr><th>Capacidad</th><td>{{ sm.capacidad.value }}</td></tr>{%- endif -%}
+            {%- if sm.peso.value != blank -%}<tr><th>Peso</th><td>{{ sm.peso.value }}</td></tr>{%- endif -%}
+            {%- if s.origen.value != blank -%}<tr><th>Origen</th><td>{{ s.origen.value }}</td></tr>{%- endif -%}
+            </tbody></table>
+          {%- elsif _parts[1] != blank -%}
+            {{ _parts[1] }}
+          {%- else -%}
+            {{ block.settings.content }}
+          {%- endif -%}
+        {%- else -%}
+          {{ block.settings.content }}
+        {%- endif -%}
+      </div>
+    </details>
+  {%- endfor -%}
+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="pdpLightbox" class="pdp-lb"><img src="" alt="{{ product.title | escape }}"></div>
+
+{%- assign vid = product.metafields.specs.video.value -%}
+{%- if vid != blank -%}
+  {%- assign yid = vid -%}
+  {%- if vid contains 'watch?v=' -%}{%- assign yid = vid | split: 'watch?v=' | last | split: '&' | first -%}
+  {%- elsif vid contains 'youtu.be/' -%}{%- assign yid = vid | split: 'youtu.be/' | last | split: '?' | first -%}
+  {%- elsif vid contains '/embed/' -%}{%- assign yid = vid | split: '/embed/' | last | split: '?' | first -%}
+  {%- elsif vid contains 'shorts/' -%}{%- assign yid = vid | split: 'shorts/' | last | split: '?' | first -%}
+  {%- endif -%}
+  <section class="pdp-videosec">
+    <div class="wrap">
+      <div class="pdp-videosec-head"><span class="pdp-videosec-eyebrow">{{ product.vendor }}</span><h2 class="display">El modelo en acción</h2></div>
+      <div class="pdp-video-big"><iframe src="https://www.youtube.com/embed/{{ yid }}" title="{{ product.title | escape }}" loading="lazy" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div>
+    </div>
+  </section>
+{%- endif -%}
+
+{%- if section.settings.show_related and product.collections.first -%}
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal"><h2 class="display">{{ section.settings.related_title }}</h2></div>
+    <div class="grid3 reveal">
+      {%- assign rel = product.collections.first.products -%}
+      {%- assign c = 0 -%}
+      {%- for p in rel -%}
+        {%- if p.id != product.id and c < 3 -%}{% render 'card-product', product: p %}{%- assign c = c | plus: 1 -%}{%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+<style>
+.pdp{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,5vw,64px);align-items:start}
+.pdp-gallery{min-width:0}
+.pdp-info{min-width:0}
+.pdp-main{aspect-ratio:1/1;background:#ffffff;border:1px solid var(--line);overflow:hidden}
+.pdp-main img{width:100%;height:100%;object-fit:contain;padding:6%;cursor:zoom-in}
+.pdp-thumbs{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.pdp-thumb{width:64px;height:64px;border:1px solid var(--line);background:#ffffff;cursor:pointer;padding:0;overflow:hidden}
+.pdp-thumb img{width:100%;height:100%;object-fit:contain;padding:4px}
+.pdp-vendor{font-family:'Oswald';text-transform:uppercase;letter-spacing:.14em;font-size:.72rem;color:var(--grey);margin-bottom:10px}
+.pdp-preventa{display:inline-block;background:#0a0a0a;color:#fff;font-family:'Oswald';text-transform:uppercase;letter-spacing:.1em;font-size:.66rem;padding:5px 10px;margin-bottom:12px}
+.pdp-preventa-note{font-size:.82rem;color:var(--grey);line-height:1.5;margin:-14px 0 26px}
+.pdp-title{font-size:clamp(1.8rem,5vw,3rem);line-height:1}
+.pdp-price{font-family:'Oswald';font-size:1.5rem;margin:18px 0 6px;display:flex;gap:12px;align-items:baseline}
+.pdp-price s{color:var(--g3);font-size:1.1rem;font-weight:400}
+.consultar-precio{color:var(--grey)}
+.pdp-sku{font-family:'Oswald';font-size:.8rem;color:var(--grey);text-transform:uppercase;letter-spacing:.06em;margin-bottom:24px}
+.pdp-sku[hidden]{display:none}
+.pdp-label{display:block;font-family:'Oswald';text-transform:uppercase;font-size:.78rem;letter-spacing:.08em;margin-bottom:8px}
+.pdp-select{width:100%;padding:14px 16px;border:1.5px solid var(--black);background:var(--white);font-family:'Oswald';text-transform:uppercase;font-size:.9rem;margin-bottom:22px;cursor:pointer}
+.pdp-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:30px}
+.pdp-actions .btn{flex:1;justify-content:center;min-width:160px}
+.pdp-acc{max-width:100%}
+.pdp-acc details{border-top:1px solid var(--line);padding:16px 0}
+.pdp-acc summary{font-family:'Oswald';text-transform:uppercase;font-size:.9rem;letter-spacing:.06em;cursor:pointer;list-style:none;display:flex;justify-content:space-between}
+.pdp-acc summary::after{content:"+";font-size:1.2rem}
+.pdp-acc details[open] summary::after{content:"–"}
+.pdp-rte{padding-top:12px;color:#444;line-height:1.6;font-size:.95rem;max-width:100%}
+.pdp-rte img{margin:10px 0;max-width:100%;height:auto}
+.pdp-spectable,.pdp-rte table{width:100%;border-collapse:collapse;margin:0 0 14px;font-size:.88rem}
+.pdp-rte table{display:block;overflow-x:auto}
+.pdp-tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 0 14px;max-width:100%}
+.pdp-tablewrap .pdp-spectable{margin:0;white-space:nowrap;min-width:560px}
+.pdp-spectable thead th,.pdp-rte thead th{text-align:left;font-family:'Oswald';text-transform:uppercase;font-size:.7rem;letter-spacing:.04em;background:#0a0a0a;color:#fff;padding:9px 11px}
+.pdp-spectable td,.pdp-rte td{padding:9px 11px;border-bottom:1px solid var(--line);color:#333}
+.pdp-spectable tbody th{text-align:left;font-family:'Oswald';text-transform:uppercase;font-size:.7rem;letter-spacing:.04em;color:var(--grey);padding:9px 11px;border-bottom:1px solid var(--line);white-space:nowrap;width:36%;vertical-align:top}
+.pdp-rte table tbody tr:nth-child(even){background:#fafafa}
+.pdp-lb{position:fixed;inset:0;background:rgba(255,255,255,.98);display:none;align-items:center;justify-content:center;z-index:9999;cursor:zoom-out;padding:20px}
+.pdp-lb.open{display:flex}
+.pdp-lb img{max-width:94%;max-height:94%;object-fit:contain;transition:transform .25s var(--ease);cursor:zoom-in}
+.pdp-lb img.zoom{transform:scale(2);cursor:zoom-out}
+.pdp-lb::after{content:"✕";position:fixed;top:22px;right:28px;font-size:1.6rem;color:#0a0a0a;font-family:'Oswald';pointer-events:none}
+.pdp-videosec{background:#0a0a0a;color:#fff;padding:clamp(60px,8vw,110px) 0 clamp(48px,7vw,96px);margin-top:clamp(24px,4vw,48px);clip-path:polygon(0 2.5vw,100% 0,100% 100%,0 100%)}
+.pdp-videosec-head{text-align:center;margin-bottom:clamp(24px,4vw,44px)}
+.pdp-videosec-eyebrow{font-family:'Oswald';text-transform:uppercase;letter-spacing:.18em;font-size:.74rem;color:#cf2e2e;display:block;margin-bottom:10px}
+.pdp-videosec .display{color:#fff;font-size:clamp(2rem,5vw,3.4rem);line-height:1}
+.pdp-video-big{position:relative;padding-bottom:56.25%;height:0;max-width:1040px;margin:0 auto;overflow:hidden;border:1px solid rgba(255,255,255,.12)}
+.pdp-video-big iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+@media(max-width:820px){.pdp{grid-template-columns:1fr}}
+@media(max-width:760px){.pdp-videosec{clip-path:polygon(0 6vw,100% 0,100% 100%,0 100%)}}
+@media(max-width:600px){
+  .pdp-rte table{font-size:.74rem}
+  .pdp-spectable{font-size:.8rem}
+  .pdp-tablewrap .pdp-spectable{min-width:480px}
+  .pdp-rte thead th,.pdp-rte td{padding:6px 7px}
+  .pdp-spectable thead th,.pdp-spectable td{padding:7px 8px}
+  .pdp-spectable tbody th{width:42%;padding:7px 8px}
+  .pdp-acc summary{font-size:.82rem}
+}
+</style>
+
+<script>
+(function(){
+  var main=document.getElementById('pdpMain');
+  var v=document.getElementById('pdpVariant');
+  if(v){v.addEventListener('change',function(){
+    var o=v.options[v.selectedIndex], d=o.dataset;
+    var pr=document.getElementById('pdpPrice');
+    if(pr&&d.price&&!pr.classList.contains('consultar-precio')){
+      pr.textContent=d.price;
+      var box=pr.parentNode, s=box.querySelector('s');
+      if(d.compare){ if(!s){ s=document.createElement('s'); box.insertBefore(s,pr); } s.textContent=d.compare; }
+      else if(s){ s.parentNode.removeChild(s); }
+    }
+    var sw=document.getElementById('pdpSkuWrap'), sk=document.getElementById('pdpSku');
+    if(sw&&sk){ sk.textContent=d.sku||''; sw.hidden=!d.sku; }
+    if(main&&d.img){ main.src=d.img; }
+    try{ var u=new URL(window.location.href); u.searchParams.set('variant',o.value); window.history.replaceState(null,'',u.toString()); }catch(e){}
+  });}
+  document.querySelectorAll('.pdp-thumb').forEach(function(t){
+    t.addEventListener('click',function(){ if(main)main.src=t.dataset.src; });
+  });
+  var lb=document.getElementById('pdpLightbox');
+  var lbImg=lb?lb.querySelector('img'):null;
+  if(main&&lb&&lbImg){
+    main.addEventListener('click',function(){ lbImg.classList.remove('zoom'); lbImg.src=main.src; lb.classList.add('open'); });
+    lb.addEventListener('click',function(){ lb.classList.remove('open'); lbImg.classList.remove('zoom'); });
+    lbImg.addEventListener('click',function(e){ e.stopPropagation(); lbImg.classList.toggle('zoom'); });
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Ficha de producto",
+  "settings": [
+    { "type": "text", "id": "variant_label", "label": "Etiqueta de variante", "default": "Color / Modelo" },
+    { "type": "text", "id": "add_label", "label": "Texto botón comprar", "default": "Agregar al carrito" },
+    { "type": "text", "id": "whatsapp", "label": "WhatsApp (número con código país, sin +)", "info": "Ej: 51907665800", "default": "51907665800" },
+    { "type": "text", "id": "whatsapp_label", "label": "Texto botón WhatsApp", "default": "Consultar por WhatsApp" },
+    { "type": "checkbox", "id": "show_related", "label": "Mostrar productos relacionados", "default": true },
+    { "type": "text", "id": "related_title", "label": "Título relacionados", "default": "También te puede servir" }
+  ],
+  "blocks": [
+    {
+      "type": "acordeon",
+      "name": "Pestaña (acordeón)",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título", "default": "Detalles técnicos" },
+        { "type": "richtext", "id": "content", "label": "Contenido", "default": "<p>Especificaciones del producto.</p>" }
+      ]
+    }
+  ]
+}
+{% endschema %}

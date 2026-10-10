@@ -1,0 +1,38 @@
+{%- comment -%} Barra superior de anuncios {%- endcomment -%}
+<div class="topbar">
+  {%- for block in section.blocks -%}
+    {{ block.settings.text }}{%- unless forloop.last -%}<span>/</span>{%- endunless -%}
+  {%- endfor -%}
+</div>
+
+{% schema %}
+{
+  "name": "Barra de anuncios",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "mensaje",
+      "name": "Mensaje",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texto",
+          "default": "Envío a todo el Perú"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    {
+      "name": "Barra de anuncios",
+      "blocks": [
+        { "type": "mensaje", "settings": { "text": "Envío a todo el Perú" } },
+        { "type": "mensaje", "settings": { "text": "Distribuidor exclusivo DUO International" } },
+        { "type": "mensaje", "settings": { "text": "Perú · Chile · Ecuador" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

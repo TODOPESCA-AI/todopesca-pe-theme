@@ -1,0 +1,147 @@
+{%- comment -%} Header sticky + menú con dropdowns (desktop) y acordeón (móvil) {%- endcomment -%}
+<header class="hdr" id="hdr">
+  <nav class="nav">
+    <a href="{{ routes.root_url }}" class="logo">
+      {%- if section.settings.logo != blank -%}
+        <img src="{{ section.settings.logo | image_url: width: 360 }}" alt="{{ shop.name }}">
+      {%- else -%}
+        {{ section.settings.logo_text }}
+      {%- endif -%}
+      <span class="brand-flag" title="Perú" aria-label="Perú"><svg viewBox="0 0 9 6"><rect width="3" height="6" x="0" fill="#D91023"/><rect width="3" height="6" x="3" fill="#ffffff"/><rect width="3" height="6" x="6" fill="#D91023"/></svg></span>
+    </a>
+
+    <div class="nav-links">
+      {%- for link in section.settings.menu.links -%}
+        {%- if link.links.size > 0 -%}
+          <div class="nav-item has-sub">
+            <a href="{{ link.url }}" class="nav-top">{{ link.title }}<svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
+            <div class="nav-dd">
+              {%- for child in link.links -%}
+                <a href="{{ child.url }}">{{ child.title }}</a>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- else -%}
+          <a href="{{ link.url }}" class="nav-top">{{ link.title }}</a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    <div class="nav-icons">
+      {%- if section.settings.show_search -%}
+        <a href="{{ routes.search_url }}" aria-label="Buscar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        </a>
+      {%- endif -%}
+      <a href="{{ routes.cart_url }}" aria-label="Carrito">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/><path d="M6 6 5 3H2"/></svg>
+      </a>
+      <button class="burger" id="burger" aria-label="Menú"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mm-top">
+    <a href="{{ routes.root_url }}" class="logo">
+      {%- if section.settings.logo != blank -%}
+        <img src="{{ section.settings.logo | image_url: width: 320 }}" alt="{{ shop.name }}">
+      {%- else -%}{{ section.settings.logo_text }}{%- endif -%}
+      <span class="brand-flag" title="Perú" aria-label="Perú"><svg viewBox="0 0 9 6"><rect width="3" height="6" x="0" fill="#D91023"/><rect width="3" height="6" x="3" fill="#ffffff"/><rect width="3" height="6" x="6" fill="#D91023"/></svg></span>
+    </a>
+    <button class="mm-close" id="mmClose">&times;</button>
+  </div>
+  {%- for link in section.settings.menu.links -%}
+    {%- if link.links.size > 0 -%}
+      <div class="mm-group">
+        <button type="button" class="mm-parent" data-acc>{{ link.title }} <span class="mm-plus">+</span></button>
+        <div class="mm-sub">
+          {%- for child in link.links -%}
+            <a href="{{ child.url }}">{{ child.title }}</a>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- else -%}
+      <a class="mm-link" href="{{ link.url }}">{{ link.title }}</a>
+    {%- endif -%}
+  {%- endfor -%}
+  <div class="mm-foot"><span>Perú</span></div>
+</div>
+
+<style>
+  /* Header negro + logo blanco grande (TodoPesca) */
+  .hdr{background:var(--black)!important;border-bottom:1px solid transparent}
+  .hdr.solid{background:var(--black)!important;backdrop-filter:blur(12px);border-color:rgba(255,255,255,.12)!important;box-shadow:0 6px 24px rgba(0,0,0,.4)!important}
+  .hdr .nav{height:104px}
+  .hdr .logo{color:#fff;display:inline-flex;align-items:center;gap:14px;margin-right:48px}
+  .hdr .logo img{height:90px;width:auto;filter:brightness(0) invert(1)}
+  .brand-flag{display:inline-flex;align-items:center}
+  .brand-flag svg{height:28px;width:42px;display:block;border:1px solid rgba(255,255,255,.25);border-radius:2px}
+  .hdr .nav-links{display:flex;align-items:center;gap:clamp(16px,2vw,30px)}
+  .hdr .nav-links a{color:#fff}
+  .hdr .nav-top::after{background:#fff}
+  .hdr .nav-icons,.hdr .nav-icons a{color:#fff}
+  .hdr .burger span{background:#fff}
+  /* Dropdown desktop */
+  .nav-item.has-sub{position:relative}
+  .nav-top{display:inline-flex;align-items:center;gap:5px}
+  .nav-caret{width:13px;height:13px;opacity:.75;transition:transform .2s}
+  .nav-item.has-sub:hover .nav-caret{transform:rotate(180deg)}
+  .nav-dd{position:absolute;top:100%;left:0;background:var(--black);border:1px solid rgba(255,255,255,.14);min-width:210px;display:flex;flex-direction:column;padding:7px 0;opacity:0;visibility:hidden;transform:translateY(7px);transition:opacity .18s,transform .18s,visibility .18s;z-index:120}
+  .nav-item.has-sub:hover .nav-dd{opacity:1;visibility:visible;transform:none}
+  .hdr .nav-dd a{font-family:'Oswald';text-transform:uppercase;letter-spacing:.04em;font-size:.74rem;padding:9px 20px;white-space:nowrap;transition:background .15s}
+  .hdr .nav-dd a::after{display:none!important}
+  .hdr .nav-dd a:hover{background:rgba(255,255,255,.1)}
+  .mobile-menu .logo{display:inline-flex;align-items:center;gap:10px}
+  .mobile-menu .logo img{filter:brightness(0) invert(1);height:54px;width:auto}
+  .mobile-menu .brand-flag svg{height:22px;width:33px}
+  /* Acordeón móvil */
+  .mm-group{border-top:1px solid rgba(0,0,0,.08)}
+  .mm-parent{display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;padding:16px 0;font-family:'Oswald';text-transform:uppercase;letter-spacing:.05em;font-size:1rem;cursor:pointer;color:inherit}
+  .mm-plus{font-size:1.3rem;line-height:1;transition:transform .2s}
+  .mm-group.open .mm-plus{transform:rotate(45deg)}
+  .mm-sub{display:none;flex-direction:column;padding:0 0 12px 14px}
+  .mm-group.open .mm-sub{display:flex}
+  .mm-sub a{padding:9px 0;font-family:'Oswald';text-transform:uppercase;letter-spacing:.04em;font-size:.82rem;color:var(--grey)}
+  /* Tarjetas de producto: señuelo completo, sin recorte */
+  .pcard .ph img{object-fit:contain!important;padding:6%}
+  /* Móvil: ocultar menú desktop y mostrar hamburguesa */
+  @media(max-width:990px){
+    .hdr .nav-links{display:none!important}
+    .hdr .burger{display:flex!important}
+    .hdr .nav{height:74px}
+    .hdr .logo img{height:60px}
+    .hdr .logo{margin-right:0}
+    .brand-flag svg{height:22px;width:33px}
+  }
+  @media(max-width:600px){
+    .hdr .nav{height:64px}
+    .hdr .logo img{height:50px}
+    .brand-flag svg{height:18px;width:27px}
+  }
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('.nav-top[href="#"]').forEach(function(a){
+    a.addEventListener('click',function(e){ e.preventDefault(); });
+  });
+  document.querySelectorAll('.mm-parent[data-acc]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      btn.parentElement.classList.toggle('open');
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "text", "id": "logo_text", "label": "Logo (texto)", "default": "TODOPESCA" },
+    { "type": "image_picker", "id": "logo", "label": "Logo (imagen, opcional)", "info": "Si subes imagen, reemplaza al texto." },
+    { "type": "link_list", "id": "menu", "label": "Menú de navegación", "default": "main-menu" },
+    { "type": "checkbox", "id": "show_search", "label": "Mostrar ícono de búsqueda", "default": true }
+  ]
+}
+{% endschema %}

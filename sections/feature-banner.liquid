@@ -1,0 +1,37 @@
+{%- comment -%} Banner editorial full-bleed {%- endcomment -%}
+<section class="feature" style="min-height:{{ section.settings.height }}vh">
+  {%- if section.settings.bg_image != blank -%}<img class="bgimg" src="{{ section.settings.bg_image | image_url: width: 2000 }}" alt="">{%- endif -%}
+  {%- if section.settings.watermark != blank -%}<div class="wm light" data-px="0.10">{{ section.settings.watermark }}</div>{%- endif -%}
+  <div class="wrap reveal" style="padding-top:clamp(64px,10vw,130px);padding-bottom:clamp(64px,10vw,130px)">
+    {%- if section.settings.eyebrow != blank -%}<div class="eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
+    <h2 class="display">{{ section.settings.title }}</h2>
+    {%- if section.settings.text != blank -%}<p>{{ section.settings.text }}</p>{%- endif -%}
+    {%- if section.settings.btn_label != blank -%}<a href="{{ section.settings.btn_link }}" class="btn inv">{{ section.settings.btn_label }}</a>{%- endif -%}
+  </div>
+</section>
+
+<style>
+  .feature::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(8,8,8,.85) 0%,rgba(8,8,8,.5) 42%,rgba(8,8,8,.08) 72%,transparent 100%);pointer-events:none}
+  .feature .wrap{position:relative;z-index:2}
+  .feature .display{color:#fff;text-shadow:0 2px 26px rgba(0,0,0,.6)}
+  .feature .eyebrow{color:#fff;opacity:.9;text-shadow:0 1px 12px rgba(0,0,0,.6)}
+  .feature p{color:rgba(255,255,255,.82);text-shadow:0 1px 16px rgba(0,0,0,.6)}
+  .feature .bgimg{opacity:.55}
+</style>
+
+{% schema %}
+{
+  "name": "Banner editorial",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "La marca insignia" },
+    { "type": "html", "id": "title", "label": "Título", "default": "El estándar técnico, no la imitación" },
+    { "type": "textarea", "id": "text", "label": "Texto", "default": "Cada señuelo DUO se afina en el túnel de pruebas de Yokohama. Acción, balance y acabado que las copias no replican. Por eso somos el distribuidor exclusivo para Perú, Chile y Ecuador." },
+    { "type": "text", "id": "btn_label", "label": "Botón — texto", "default": "Explorar DUO →" },
+    { "type": "url", "id": "btn_link", "label": "Botón — enlace" },
+    { "type": "image_picker", "id": "bg_image", "label": "Imagen de fondo (opcional)" },
+    { "type": "text", "id": "watermark", "label": "Marca de agua", "default": "DUO" },
+    { "type": "range", "id": "height", "min": 50, "max": 100, "step": 5, "unit": "vh", "label": "Alto", "default": 80 }
+  ],
+  "presets": [ { "name": "Banner editorial" } ]
+}
+{% endschema %}

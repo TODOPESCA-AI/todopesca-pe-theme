@@ -1,0 +1,58 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "TodoPesca B/N",
+    "theme_version": "1.0.0",
+    "theme_author": "TPGROUP",
+    "theme_documentation_url": "https://todopescashop.com",
+    "theme_support_url": "https://todopescashop.com"
+  },
+  {
+    "name": "Colores",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Color principal (texto / negro)",
+        "default": "#0a0a0a"
+      },
+      {
+        "type": "color",
+        "id": "color_bg",
+        "label": "Fondo (blanco)",
+        "default": "#ffffff"
+      }
+    ]
+  },
+  {
+    "name": "Diseño",
+    "settings": [
+      {
+        "type": "range",
+        "id": "page_width",
+        "min": 1100,
+        "max": 1600,
+        "step": 20,
+        "unit": "px",
+        "label": "Ancho máximo del contenido",
+        "default": 1400
+      },
+      {
+        "type": "checkbox",
+        "id": "dotted_bg",
+        "label": "Fondo de puntos con efecto al hacer scroll",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Marca",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon (ícono de pestaña)"
+      }
+    ]
+  }
+]

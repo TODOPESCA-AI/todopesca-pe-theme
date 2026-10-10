@@ -1,0 +1,59 @@
+{%- comment -%} Cinta animada de marcas (logos) {%- endcomment -%}
+<div class="ticker">
+  <div class="ticker-track">
+    {%- for i in (1..2) -%}
+      {%- for block in section.blocks -%}
+        {%- assign t = block.settings.text | upcase -%}
+        {%- assign url = '' -%}
+        {%- if t contains 'DUO' -%}{%- assign url = 'https://cdn.shopify.com/s/files/1/0624/3496/7606/files/duologoweb2.png?v=1781416230' -%}
+        {%- elsif t contains 'MAJOR' -%}{%- assign url = 'https://cdn.shopify.com/s/files/1/0624/3496/7606/files/mclogoweb2.png?v=1781416230' -%}
+        {%- elsif t contains 'OWNER' -%}{%- assign url = 'https://cdn.shopify.com/s/files/1/0624/3496/7606/files/ownerlogoweb2.png?v=1781416230' -%}
+        {%- elsif t contains 'DAIWA' -%}{%- assign url = 'https://cdn.shopify.com/s/files/1/0624/3496/7606/files/daiwalogoweb2.png?v=1781416230' -%}
+        {%- elsif t contains 'SIMMS' -%}{%- assign url = 'https://cdn.shopify.com/s/files/1/0624/3496/7606/files/simmslogoweb2.png?v=1781416230' -%}
+        {%- elsif t contains 'BRAID' -%}{%- assign url = 'https://cdn.shopify.com/s/files/1/0624/3496/7606/files/xbraidlogoweb2.png?v=1781416229' -%}
+        {%- elsif t contains 'GOMEXUS' -%}{%- assign url = 'https://cdn.shopify.com/s/files/1/0624/3496/7606/files/gomexuslogoweb2.png?v=1781416230' -%}
+        {%- endif -%}
+        {%- unless t contains 'SUGOI' -%}
+          {%- if url != blank -%}<span class="ticker-logo"><img src="{{ url }}" alt="{{ block.settings.text | escape }}" loading="lazy"></span>{%- else -%}<span>{{ block.settings.text }}</span>{%- endif -%}
+        {%- endunless -%}
+      {%- endfor -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+<style>
+.ticker-track span.ticker-logo{opacity:1 !important}
+.ticker-logo{display:inline-flex;align-items:center}
+.ticker-logo img{height:46px;width:auto;max-width:200px;object-fit:contain;opacity:1}
+</style>
+
+{% schema %}
+{
+  "name": "Cinta de marcas",
+  "blocks": [
+    {
+      "type": "marca",
+      "name": "Marca",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Nombre", "default": "MARCA" },
+        { "type": "checkbox", "id": "bold", "label": "Resaltar (negrita)", "default": false }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Cinta de marcas",
+      "blocks": [
+        { "type": "marca", "settings": { "text": "DUO INTERNATIONAL", "bold": true } },
+        { "type": "marca", "settings": { "text": "SIMMS" } },
+        { "type": "marca", "settings": { "text": "DAIWA" } },
+        { "type": "marca", "settings": { "text": "OWNER" } },
+        { "type": "marca", "settings": { "text": "MAJOR CRAFT" } },
+        { "type": "marca", "settings": { "text": "X-BRAID" } },
+        { "type": "marca", "settings": { "text": "GOMEXUS" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

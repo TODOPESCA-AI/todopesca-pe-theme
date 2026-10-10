@@ -1,0 +1,30 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "variant_label": "Color / Modelo",
+        "add_label": "Agregar al carrito",
+        "whatsapp": "51907665800",
+        "whatsapp_label": "Consultar por WhatsApp",
+        "show_related": true,
+        "related_title": "También te puede servir"
+      },
+      "blocks": {
+        "specs": { "type": "acordeon", "settings": { "title": "Detalles técnicos", "content": "<p>Especificaciones del producto.</p>" } },
+        "ship": { "type": "acordeon", "settings": { "title": "Envíos y entregas", "content": "<p>Envíos a todo el Perú por <strong>Shalom</strong>. Despachamos a la agencia Shalom más cercana a tu zona. En Lima Metropolitana, delivery a domicilio.</p>" } }
+      },
+      "block_order": ["specs","ship"]
+    }
+  },
+  "order": ["main"]
+}
